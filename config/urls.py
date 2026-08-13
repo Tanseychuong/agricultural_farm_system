@@ -140,7 +140,7 @@ urlpatterns = [
         name="worker_delete",
     ),
 
-    # Equipment Management
+    # Equipment Management Path
     path("equipment/", equipment_list, name="equipment_list"),
     path("equipment/add/", equipment_create, name="equipment_create"),
     path(
