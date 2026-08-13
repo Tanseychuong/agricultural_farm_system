@@ -126,7 +126,7 @@ urlpatterns = [
         name="crop_delete",
     ),
 
-    # Worker Management
+    # Worker Management Path
     path("workers/", worker_list, name="worker_list"),
     path("workers/add/", worker_create, name="worker_create"),
     path(
