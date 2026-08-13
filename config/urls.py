@@ -109,7 +109,7 @@ urlpatterns = [
     path("logout/", FarmLogoutView.as_view(), name="logout"),
     path("register/", register, name="register"),
 
-    # Dashboard
+    # Dashboard path
     path("", dashboard, name="dashboard"),
 
     # Crop Management Path
