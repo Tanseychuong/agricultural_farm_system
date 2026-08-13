@@ -112,7 +112,7 @@ urlpatterns = [
     # Dashboard
     path("", dashboard, name="dashboard"),
 
-    # Crop Management
+    # Crop Management Path
     path("crops/", crop_list, name="crop_list"),
     path("crops/add/", crop_create, name="crop_create"),
     path(
