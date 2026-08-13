@@ -1,0 +1,167 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Harvest Worker Management</h2>
+
+{% if perms.farm.add_harvestworker %}
+<p>
+    <a href="{% url 'harvest_worker_create' %}">
+        Add Harvest Worker
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop, plot, worker, or task role"
+        >
+    </p>
+
+    <p>
+        <label for="harvest">Filter by harvest:</label>
+
+        <select id="harvest" name="harvest">
+
+            <option value="">All Harvests</option>
+
+            {% for item in harvests %}
+                <option
+                    value="{{ item.harvest_id }}"
+                    {% if item.harvest_id|stringformat:"s" == harvest_id %}selected{% endif %}
+                >
+                    {{ item.crop.crop_type }}
+                    - Plot {{ item.crop.plot_number }}
+                    - {{ item.harvest_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="task_role">Filter by task role:</label>
+
+        <select id="task_role" name="task_role">
+
+            <option value="">All Task Roles</option>
+
+            {% for item in task_roles %}
+                <option
+                    value="{{ item }}"
+                    {% if item == task_role %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'harvest_worker_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Harvest</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Task Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.harvest.crop.crop_type }}
+                - Plot {{ assignment.harvest.crop.plot_number }}
+                - {{ assignment.harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {{ assignment.task_role }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_harvestworker %}
+                    <a href="{% url 'harvest_worker_update' assignment.harvest_worker_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_harvestworker %}
+                    <a href="{% url 'harvest_worker_delete' assignment.harvest_worker_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No harvest worker assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

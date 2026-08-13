@@ -1,0 +1,18 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Equipment</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ equipment.equipment_name }}</strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'equipment_list' %}">Cancel</a>
+</form>
+
+{% endblock %}

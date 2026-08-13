@@ -1,0 +1,41 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Harvest</h2>
+
+<p>
+    Are you sure you want to delete this harvest record?
+</p>
+
+<p>
+    <strong>Crop:</strong>
+    {{ harvest.crop.crop_type }}
+    - Plot {{ harvest.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Harvest Date:</strong>
+    {{ harvest.harvest_date }}
+</p>
+
+<p>
+    <strong>Quantity:</strong>
+    {{ harvest.quantity }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'harvest_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

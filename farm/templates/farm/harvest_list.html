@@ -1,0 +1,120 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Harvest Management</h2>
+
+{% if perms.farm.add_harvest %}
+<p>
+    <a href="{% url 'harvest_create' %}">
+        Add Harvest
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop or plot number"
+        >
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option
+                    value="{{ item.crop_id }}"
+                    {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}
+                >
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'harvest_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Crop</th>
+            <th>Harvest Date</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for harvest in harvests %}
+
+        <tr>
+
+            <td>
+                {{ harvest.crop.crop_type }}
+                - Plot {{ harvest.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ harvest.quantity }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_harvest %}
+                    <a href="{% url 'harvest_update' harvest.harvest_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_harvest %}
+                    <a href="{% url 'harvest_delete' harvest.harvest_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="4">
+                No harvest records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

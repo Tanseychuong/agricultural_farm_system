@@ -1,0 +1,84 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Customer Management</h2>
+
+{% if perms.farm.add_customer %}
+<p>
+  <a href="{% url 'customer_create' %}">Add Customer</a>
+</p>
+{% endif %}
+
+<form method="get">
+  <p>
+    <label for="search">Search:</label>
+
+    <input
+      type="text"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Name, contact, or address"
+    />
+  </p>
+
+  <p>
+    <label for="address">Filter by address:</label>
+
+    <select id="address" name="address">
+      <option value="">All Addresses</option>
+
+      {% for item in addresses %}
+      <option value="{{ item }}" {% if item == address %}selected{% endif %}>
+        {{ item }}
+      </option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <button type="submit">Search / Filter</button>
+
+  <a href="{% url 'customer_list' %}"> Clear </a>
+</form>
+
+<br />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Contact Details</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for customer in customers %}
+
+    <tr>
+      <td>{{ customer.full_name }}</td>
+
+      <td>{{ customer.contact_details }}</td>
+
+      <td>{{ customer.address }}</td>
+
+      <td>
+        {% if perms.farm.change_customer %}
+        <a href="{% url 'customer_update' customer.customer_id %}"> Edit </a>
+        {% endif %} {% if perms.farm.delete_customer %}
+        <a href="{% url 'customer_delete' customer.customer_id %}">Delete</a>
+        {% endif %}
+      </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+      <td colspan="4">No customers found.</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

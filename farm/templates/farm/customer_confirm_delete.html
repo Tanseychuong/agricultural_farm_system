@@ -1,0 +1,22 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Customer</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ customer.full_name }}</strong>?
+</p>
+
+<p>Contact: {{ customer.contact_details }}</p>
+
+<p>Address: {{ customer.address }}</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'customer_list' %}"> Cancel </a>
+</form>
+
+{% endblock %}

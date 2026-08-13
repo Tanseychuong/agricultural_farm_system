@@ -1,0 +1,148 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Equipment Assignment Management</h2>
+
+{% if perms.farm.add_equipmentassignment %}
+<p>
+    <a href="{% url 'equipment_assignment_create' %}">
+        Add Equipment Assignment
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Equipment, worker, or employee ID"
+        >
+    </p>
+
+    <p>
+        <label for="equipment">Filter by equipment:</label>
+
+        <select id="equipment" name="equipment">
+
+            <option value="">All Equipment</option>
+
+            {% for item in equipment %}
+                <option
+                    value="{{ item.equipment_id }}"
+                    {% if item.equipment_id|stringformat:"s" == equipment_id %}selected{% endif %}
+                >
+                    {{ item.equipment_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'equipment_assignment_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Equipment</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Return Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.equipment.equipment_name }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {% if assignment.return_date %}
+                    {{ assignment.return_date }}
+                {% else %}
+                    Active
+                {% endif %}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_equipmentassignment %}
+                    <a href="{% url 'equipment_assignment_update' assignment.assignment_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_equipmentassignment %}
+                    <a href="{% url 'equipment_assignment_delete' assignment.assignment_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No equipment assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

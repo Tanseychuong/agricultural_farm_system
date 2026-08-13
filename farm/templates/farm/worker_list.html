@@ -1,0 +1,63 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Worker Management</h2>
+
+{% if perms.farm.add_worker %}
+<a href="{% url 'worker_create' %}">Add Worker</a>
+{% endif %}
+
+<hr />
+
+<form method="get">
+  <input
+    type="text"
+    name="search"
+    placeholder="Search employee ID or name"
+    value="{{ search }}"
+  />
+
+  <button type="submit">Search</button>
+</form>
+
+<hr />
+
+<table border="1" cellpadding="6">
+  <tr>
+    <th>Employee ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Contact</th>
+    <th>Job Role</th>
+    <th>Hire Date</th>
+    <th>Actions</th>
+  </tr>
+
+  {% for worker in workers %}
+
+  <tr>
+    <td>{{ worker.employee_id }}</td>
+    <td>{{ worker.fname }}</td>
+    <td>{{ worker.lname }}</td>
+    <td>{{ worker.contact_details }}</td>
+    <td>{{ worker.job_role }}</td>
+    <td>{{ worker.hire_date }}</td>
+
+    <td>
+      {% if perms.farm.change_worker %}
+      <a href="{% url 'worker_update' worker.worker_id %}"> Edit </a>
+      {% endif %} {% if perms.farm.delete_worker %}
+      <a href="{% url 'worker_delete' worker.worker_id %}">Delete</a>
+      {% endif %}
+    </td>
+  </tr>
+
+  {% empty %}
+
+  <tr>
+    <td colspan="7">No workers found.</td>
+  </tr>
+
+  {% endfor %}
+</table>
+
+{% endblock %}

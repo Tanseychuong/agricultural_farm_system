@@ -1,0 +1,31 @@
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+<main class="login-screen">
+    <section class="login-card">
+        <a class="brand" href="#">
+            <span style="color: green">Farm<span>Management</span></span>
+        </a>
+
+        <h2>Welcome back</h2>
+
+        <p>Sign in to manage your farm operation.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Sign in</button>
+        </form>
+
+        {% if form.errors %}
+        <p class="login-error">
+            Invalid username or password. Please try again.
+        </p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}
+

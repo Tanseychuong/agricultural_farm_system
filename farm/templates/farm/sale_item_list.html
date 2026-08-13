@@ -1,0 +1,154 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Sale Item Management</h2>
+
+{% if perms.farm.add_saleitem %}
+<p>
+    <a href="{% url 'sale_item_create' %}">
+        Add Sale Item
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Invoice, customer, crop, or plot"
+        >
+    </p>
+
+    <p>
+        <label for="sale">Filter by sale:</label>
+
+        <select id="sale" name="sale">
+
+            <option value="">All Sales</option>
+
+            {% for item in sales %}
+                <option
+                    value="{{ item.sale_id }}"
+                    {% if item.sale_id|stringformat:"s" == sale_id %}selected{% endif %}
+                >
+                    {{ item.invoice_number }}
+                    - {{ item.customer.full_name }}
+                    - {{ item.sale_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="harvest">Filter by harvest:</label>
+
+        <select id="harvest" name="harvest">
+
+            <option value="">All Harvests</option>
+
+            {% for item in harvests %}
+                <option
+                    value="{{ item.harvest_id }}"
+                    {% if item.harvest_id|stringformat:"s" == harvest_id %}selected{% endif %}
+                >
+                    {{ item.crop.crop_type }}
+                    - Plot {{ item.crop.plot_number }}
+                    - {{ item.harvest_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'sale_item_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Invoice</th>
+            <th>Customer</th>
+            <th>Harvest</th>
+            <th>Quantity Sold</th>
+            <th>Unit Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in sale_items %}
+
+        <tr>
+
+            <td>
+                {{ item.sale.invoice_number }}
+            </td>
+
+            <td>
+                {{ item.sale.customer.full_name }}
+            </td>
+
+            <td>
+                {{ item.harvest.crop.crop_type }}
+                - Plot {{ item.harvest.crop.plot_number }}
+                - {{ item.harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ item.quantity_sold }}
+            </td>
+
+            <td>
+                {{ item.unit_price }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_saleitem %}
+                    <a href="{% url 'sale_item_update' item.sale_item_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_saleitem %}
+                    <a href="{% url 'sale_item_delete' item.sale_item_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="6">
+                No sale items found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

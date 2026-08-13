@@ -1,0 +1,47 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Crop Worker Assignment</h2>
+
+<p>
+    Are you sure you want to delete this crop worker assignment?
+</p>
+
+<p>
+    <strong>Crop:</strong>
+    {{ assignment.crop.crop_type }}
+    - Plot {{ assignment.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Worker:</strong>
+    {{ assignment.worker.fname }}
+    {{ assignment.worker.lname }}
+</p>
+
+<p>
+    <strong>Assigned Date:</strong>
+    {{ assignment.assigned_date }}
+</p>
+
+<p>
+    <strong>Task Role:</strong>
+    {{ assignment.task_role }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'crop_worker_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

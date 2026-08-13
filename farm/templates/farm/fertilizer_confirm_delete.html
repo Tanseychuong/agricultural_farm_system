@@ -1,0 +1,31 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Fertilizer</h2>
+
+<p>
+    Are you sure you want to delete
+    <strong>{{ fertilizer.fertilizer_type }}</strong>?
+</p>
+
+<p>
+    Stock Level: {{ fertilizer.stock_level }}
+    {{ fertilizer.unit }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'fertilizer_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

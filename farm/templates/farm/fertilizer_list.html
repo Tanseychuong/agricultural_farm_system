@@ -1,0 +1,110 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Fertilizer Management</h2>
+
+{% if perms.farm.add_fertilizer %}
+<p>
+    <a href="{% url 'fertilizer_create' %}">
+        Add Fertilizer
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Fertilizer type"
+        >
+    </p>
+
+    <p>
+        <label for="unit">Filter by unit:</label>
+
+        <select id="unit" name="unit">
+
+            <option value="">All Units</option>
+
+            {% for item in units %}
+                <option value="{{ item }}" {% if item == unit %}selected{% endif %}>
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'fertilizer_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Fertilizer Type</th>
+            <th>Stock Level</th>
+            <th>Unit</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for fertilizer in fertilizers %}
+
+        <tr>
+
+            <td>{{ fertilizer.fertilizer_type }}</td>
+
+            <td>{{ fertilizer.stock_level }}</td>
+
+            <td>{{ fertilizer.unit }}</td>
+
+            <td>
+
+                {% if perms.farm.change_fertilizer %}
+                    <a href="{% url 'fertilizer_update' fertilizer.fertilizer_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_fertilizer %}
+                    <a href="{% url 'fertilizer_delete' fertilizer.fertilizer_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="4">
+                No fertilizers found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

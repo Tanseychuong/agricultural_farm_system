@@ -1,0 +1,2477 @@
+================================================================================
+farm_list.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Farm Management</h2>
+
+{% if perms.farm.add_farm %}
+<p>
+  <a href="{% url 'farm_create' %}">Add Farm</a>
+</p>
+{% endif %}
+
+<form method="get">
+  <p>
+    <label for="search">Search:</label>
+
+    <input
+      type="text"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Farm name or location"
+    />
+  </p>
+
+  <p>
+    <label for="location">Filter by location:</label>
+
+    <select id="location" name="location">
+      <option value="">All Locations</option>
+
+      {% for item in locations %}
+      <option
+        value="{{ item }}"
+        {%
+        if
+        item=""
+        ="location"
+        %}selected{%
+        endif
+        %}
+      >
+        {{ item }}
+      </option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <button type="submit">Search / Filter</button>
+
+  <a href="{% url 'farm_list' %}"> Clear </a>
+</form>
+
+<br />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Farm Name</th>
+      <th>Location</th>
+      <th>Total Size</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for farm in farms %}
+
+    <tr>
+      <td>{{ farm.farm_name }}</td>
+
+      <td>{{ farm.location }}</td>
+
+      <td>{{ farm.total_size }}</td>
+
+      <td>
+        {% if perms.farm.change_farm %}
+        <a href="{% url 'farm_update' farm.farm_id %}"> Edit </a>
+        {% endif %} {% if perms.farm.delete_farm %}
+        <form
+          method="post"
+          action="{% url 'farm_delete' farm.farm_id %}"
+          style="display: inline"
+        >
+          {% csrf_token %}
+
+          <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+      <td colspan="4">No farms found.</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+
+
+================================================================================
+crop_list.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Customer Management</h2>
+
+{% if perms.farm.add_customer %}
+<p>
+  <a href="{% url 'customer_create' %}">Add Customer</a>
+</p>
+{% endif %}
+
+<form method="get">
+  <p>
+    <label for="search">Search:</label>
+
+    <input
+      type="text"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Name, contact, or address"
+    />
+  </p>
+
+  <p>
+    <label for="address">Filter by address:</label>
+
+    <select id="address" name="address">
+      <option value="">All Addresses</option>
+
+      {% for item in addresses %}
+      <option value="{{ item }}" {% if item="" ="address" %}selected{% endif %}>
+        {{ item }}
+      </option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <button type="submit">Search / Filter</button>
+
+  <a href="{% url 'customer_list' %}"> Clear </a>
+</form>
+
+<br />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Contact Details</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for customer in customers %}
+
+    <tr>
+      <td>{{ customer.full_name }}</td>
+
+      <td>{{ customer.contact_details }}</td>
+
+      <td>{{ customer.address }}</td>
+
+      <td>
+        {% if perms.farm.change_customer %}
+        <a href="{% url 'customer_update' customer.customer_id %}"> Edit </a>
+        {% endif %} {% if perms.farm.delete_customer %}
+        <form
+          method="post"
+          action="{% url 'customer_delete' customer.customer_id %}"
+          style="display: inline"
+        >
+          {% csrf_token %}
+
+          <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+      <td colspan="4">No customers found.</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+
+
+================================================================================
+worker_list.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Worker Management</h2>
+
+{% if perms.farm.add_worker %}
+<a href="{% url 'worker_create' %}">Add Worker</a>
+{% endif %}
+
+<hr />
+
+<form method="get">
+  <input
+    type="text"
+    name="search"
+    placeholder="Search employee ID or name"
+    value="{{ search }}"
+  />
+
+  <button type="submit">Search</button>
+</form>
+
+<hr />
+
+<table border="1" cellpadding="6">
+  <tr>
+    <th>Employee ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Contact</th>
+    <th>Job Role</th>
+    <th>Hire Date</th>
+    <th>Actions</th>
+  </tr>
+
+  {% for worker in workers %}
+
+  <tr>
+    <td>{{ worker.employee_id }}</td>
+    <td>{{ worker.fname }}</td>
+    <td>{{ worker.lname }}</td>
+    <td>{{ worker.contact_details }}</td>
+    <td>{{ worker.job_role }}</td>
+    <td>{{ worker.hire_date }}</td>
+
+    <td>
+      {% if perms.farm.change_worker %}
+      <a href="{% url 'worker_update' worker.worker_id %}"> Edit </a>
+      {% endif %} {% if perms.farm.delete_worker %}
+      <form
+        method="post"
+        action="{% url 'worker_delete' worker.worker_id %}"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+
+  {% empty %}
+
+  <tr>
+    <td colspan="7">No workers found.</td>
+  </tr>
+
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+
+
+================================================================================
+equipment_list.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Equipment Management</h2>
+
+{% if perms.farm.add_equipment %}
+<a href="{% url 'equipment_create' %}">Add Equipment</a>
+{% endif %}
+
+<hr />
+
+<form method="get">
+  <input
+    type="text"
+    name="search"
+    placeholder="Search equipment name or type"
+    value="{{ search }}"
+  />
+
+  <select name="status">
+    <option value="">All statuses</option>
+
+    {% for item in statuses %}
+    <option
+      value="{{ item }}"
+      {%
+      if
+      item=""
+      ="selected_status"
+      %}selected{%
+      endif
+      %}
+    >
+      {{ item }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Search</button>
+</form>
+
+<hr />
+
+<table border="1" cellpadding="6">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+
+  {% for item in equipment %}
+
+  <tr>
+    <td>{{ item.equipment_name }}</td>
+    <td>{{ item.equipment_type }}</td>
+    <td>{{ item.status }}</td>
+
+    <td>
+      {% if perms.farm.change_equipment %}
+      <a href="{% url 'equipment_update' item.equipment_id %}"> Edit </a>
+      {% endif %} {% if perms.farm.delete_equipment %}
+      <form
+        method="post"
+        action="{% url 'equipment_delete' item.equipment_id %}"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+
+  {% empty %}
+
+  <tr>
+    <td colspan="4">No equipment found.</td>
+  </tr>
+
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+
+
+================================================================================
+customer_list.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Customer Management</h2>
+
+{% if perms.farm.add_customer %}
+<p>
+  <a href="{% url 'customer_create' %}">Add Customer</a>
+</p>
+{% endif %}
+
+<form method="get">
+  <p>
+    <label for="search">Search:</label>
+
+    <input
+      type="text"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Name, contact, or address"
+    />
+  </p>
+
+  <p>
+    <label for="address">Filter by address:</label>
+
+    <select id="address" name="address">
+      <option value="">All Addresses</option>
+
+      {% for item in addresses %}
+      <option value="{{ item }}" {% if item == address %}selected{% endif %}>
+        {{ item }}
+      </option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <button type="submit">Search / Filter</button>
+
+  <a href="{% url 'customer_list' %}"> Clear </a>
+</form>
+
+<br />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Contact Details</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for customer in customers %}
+
+    <tr>
+      <td>{{ customer.full_name }}</td>
+
+      <td>{{ customer.contact_details }}</td>
+
+      <td>{{ customer.address }}</td>
+
+      <td>
+        {% if perms.farm.change_customer %}
+        <a href="{% url 'customer_update' customer.customer_id %}"> Edit </a>
+        {% endif %} {% if perms.farm.delete_customer %}
+        <form
+          method="post"
+          action="{% url 'customer_delete' customer.customer_id %}"
+          style="display: inline"
+        >
+          {% csrf_token %}
+
+          <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+      <td colspan="4">No customers found.</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+
+
+================================================================================
+fertilizer_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Fertilizer Management</h2>
+
+{% if perms.farm.add_fertilizer %}
+<p>
+    <a href="{% url 'fertilizer_create' %}">
+        Add Fertilizer
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Fertilizer type"
+        >
+    </p>
+
+    <p>
+        <label for="unit">Filter by unit:</label>
+
+        <select id="unit" name="unit">
+
+            <option value="">All Units</option>
+
+            {% for item in units %}
+                <option value="{{ item }}" {% if item == unit %}selected{% endif %}>
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'fertilizer_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Fertilizer Type</th>
+            <th>Stock Level</th>
+            <th>Unit</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for fertilizer in fertilizers %}
+
+        <tr>
+
+            <td>{{ fertilizer.fertilizer_type }}</td>
+
+            <td>{{ fertilizer.stock_level }}</td>
+
+            <td>{{ fertilizer.unit }}</td>
+
+            <td>
+
+                {% if perms.farm.change_fertilizer %}
+                    <a href="{% url 'fertilizer_update' fertilizer.fertilizer_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_fertilizer %}
+                    <form
+                        method="post"
+                        action="{% url 'fertilizer_delete' fertilizer.fertilizer_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="4">
+                No fertilizers found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+fertilizer_usage_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Fertilizer Usage Management</h2>
+
+{% if perms.farm.add_fertilizerusage %}
+<p>
+    <a href="{% url 'fertilizer_usage_create' %}">
+        Add Fertilizer Usage
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Fertilizer type or crop"
+        >
+    </p>
+
+    <p>
+        <label for="fertilizer">Filter by fertilizer:</label>
+
+        <select id="fertilizer" name="fertilizer">
+
+            <option value="">All Fertilizers</option>
+
+            {% for item in fertilizers %}
+                <option value="{{ item.fertilizer_id }}" {% if item.fertilizer_id|stringformat:"s" == fertilizer_id %}selected{% endif %}>
+                    {{ item.fertilizer_type }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option value="{{ item.crop_id }}" {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}>
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'fertilizer_usage_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Fertilizer</th>
+            <th>Crop</th>
+            <th>Quantity Used</th>
+            <th>Usage Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for usage in usages %}
+
+        <tr>
+
+            <td>
+                {{ usage.fertilizer.fertilizer_type }}
+            </td>
+
+            <td>
+                {{ usage.crop.crop_type }}
+                - Plot {{ usage.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ usage.quantity_used }}
+            </td>
+
+            <td>
+                {{ usage.usage_date }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_fertilizerusage %}
+                    <a href="{% url 'fertilizer_usage_update' usage.usage_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_fertilizerusage %}
+                    <form
+                        method="post"
+                        action="{% url 'fertilizer_usage_delete' usage.usage_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No fertilizer usage records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+equipment_assignment_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Equipment Assignment Management</h2>
+
+{% if perms.farm.add_equipmentassignment %}
+<p>
+    <a href="{% url 'equipment_assignment_create' %}">
+        Add Equipment Assignment
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Equipment, worker, or employee ID"
+        >
+    </p>
+
+    <p>
+        <label for="equipment">Filter by equipment:</label>
+
+        <select id="equipment" name="equipment">
+
+            <option value="">All Equipment</option>
+
+            {% for item in equipment %}
+                <option
+                    value="{{ item.equipment_id }}"
+                    {% if item.equipment_id|stringformat:"s" == equipment_id %}selected{% endif %}
+                >
+                    {{ item.equipment_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'equipment_assignment_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Equipment</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Return Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.equipment.equipment_name }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {% if assignment.return_date %}
+                    {{ assignment.return_date }}
+                {% else %}
+                    Active
+                {% endif %}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_equipmentassignment %}
+                    <a href="{% url 'equipment_assignment_update' assignment.assignment_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_equipmentassignment %}
+                    <form
+                        method="post"
+                        action="{% url 'equipment_assignment_delete' assignment.assignment_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No equipment assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+equipment_maintenance_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Equipment Maintenance Management</h2>
+
+{% if perms.farm.add_equipmentmaintenance %}
+<p>
+    <a href="{% url 'equipment_maintenance_create' %}">
+        Add Equipment Maintenance
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Equipment or description"
+        >
+    </p>
+
+    <p>
+        <label for="equipment">Filter by equipment:</label>
+
+        <select id="equipment" name="equipment">
+
+            <option value="">All Equipment</option>
+
+            {% for item in equipment %}
+                <option
+                    value="{{ item.equipment_id }}"
+                    {% if item.equipment_id|stringformat:"s" == equipment_id %}selected{% endif %}
+                >
+                    {{ item.equipment_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="status">Filter by status:</label>
+
+        <select id="status" name="status">
+
+            <option value="">All Statuses</option>
+
+            {% for item in statuses %}
+                <option
+                    value="{{ item }}"
+                    {% if item == status %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'equipment_maintenance_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Equipment</th>
+            <th>Maintenance Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for maintenance in maintenances %}
+
+        <tr>
+
+            <td>
+                {{ maintenance.equipment.equipment_name }}
+            </td>
+
+            <td>
+                {{ maintenance.maintenance_date }}
+            </td>
+
+            <td>
+                {{ maintenance.description }}
+            </td>
+
+            <td>
+                {{ maintenance.status }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_equipmentmaintenance %}
+                    <a href="{% url 'equipment_maintenance_update' maintenance.maintenance_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_equipmentmaintenance %}
+                    <form
+                        method="post"
+                        action="{% url 'equipment_maintenance_delete' maintenance.maintenance_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No equipment maintenance records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+crop_worker_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Crop Worker Management</h2>
+
+{% if perms.farm.add_cropworker %}
+<p>
+    <a href="{% url 'crop_worker_create' %}">
+        Add Crop Worker
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop, plot, worker, or task role"
+        >
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option
+                    value="{{ item.crop_id }}"
+                    {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}
+                >
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="task_role">Filter by task role:</label>
+
+        <select id="task_role" name="task_role">
+
+            <option value="">All Task Roles</option>
+
+            {% for item in task_roles %}
+                <option
+                    value="{{ item }}"
+                    {% if item == task_role %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'crop_worker_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Crop</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Task Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.crop.crop_type }}
+                - Plot {{ assignment.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {{ assignment.task_role }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_cropworker %}
+                    <a href="{% url 'crop_worker_update' assignment.crop_worker_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_cropworker %}
+                    <form
+                        method="post"
+                        action="{% url 'crop_worker_delete' assignment.crop_worker_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No crop worker assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+harvest_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Harvest Management</h2>
+
+{% if perms.farm.add_harvest %}
+<p>
+    <a href="{% url 'harvest_create' %}">
+        Add Harvest
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop or plot number"
+        >
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option
+                    value="{{ item.crop_id }}"
+                    {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}
+                >
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'harvest_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Crop</th>
+            <th>Harvest Date</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for harvest in harvests %}
+
+        <tr>
+
+            <td>
+                {{ harvest.crop.crop_type }}
+                - Plot {{ harvest.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ harvest.quantity }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_harvest %}
+                    <a href="{% url 'harvest_update' harvest.harvest_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_harvest %}
+                    <form
+                        method="post"
+                        action="{% url 'harvest_delete' harvest.harvest_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="4">
+                No harvest records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+harvest_worker_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Harvest Worker Management</h2>
+
+{% if perms.farm.add_harvestworker %}
+<p>
+    <a href="{% url 'harvest_worker_create' %}">
+        Add Harvest Worker
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop, plot, worker, or task role"
+        >
+    </p>
+
+    <p>
+        <label for="harvest">Filter by harvest:</label>
+
+        <select id="harvest" name="harvest">
+
+            <option value="">All Harvests</option>
+
+            {% for item in harvests %}
+                <option
+                    value="{{ item.harvest_id }}"
+                    {% if item.harvest_id|stringformat:"s" == harvest_id %}selected{% endif %}
+                >
+                    {{ item.crop.crop_type }}
+                    - Plot {{ item.crop.plot_number }}
+                    - {{ item.harvest_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="task_role">Filter by task role:</label>
+
+        <select id="task_role" name="task_role">
+
+            <option value="">All Task Roles</option>
+
+            {% for item in task_roles %}
+                <option
+                    value="{{ item }}"
+                    {% if item == task_role %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'harvest_worker_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Harvest</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Task Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.harvest.crop.crop_type }}
+                - Plot {{ assignment.harvest.crop.plot_number }}
+                - {{ assignment.harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {{ assignment.task_role }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_harvestworker %}
+                    <a href="{% url 'harvest_worker_update' assignment.harvest_worker_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_harvestworker %}
+                    <form
+                        method="post"
+                        action="{% url 'harvest_worker_delete' assignment.harvest_worker_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No harvest worker assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+sale_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Sale Management</h2>
+
+{% if perms.farm.add_sale %}
+<p>
+    <a href="{% url 'sale_create' %}">
+        Add Sale
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Customer or invoice number"
+        >
+    </p>
+
+    <p>
+        <label for="customer">Filter by customer:</label>
+
+        <select id="customer" name="customer">
+
+            <option value="">All Customers</option>
+
+            {% for item in customers %}
+                <option
+                    value="{{ item.customer_id }}"
+                    {% if item.customer_id|stringformat:"s" == customer_id %}selected{% endif %}
+                >
+                    {{ item.full_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'sale_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Sale Date</th>
+            <th>Invoice Number</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for sale in sales %}
+
+        <tr>
+
+            <td>
+                {{ sale.customer.full_name }}
+            </td>
+
+            <td>
+                {{ sale.sale_date }}
+            </td>
+
+            <td>
+                {{ sale.invoice_number }}
+            </td>
+
+            <td>
+                {{ sale.total_amount }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_sale %}
+                    <a href="{% url 'sale_update' sale.sale_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_sale %}
+                    <form
+                        method="post"
+                        action="{% url 'sale_delete' sale.sale_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No sales found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+sale_item_list.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Sale Item Management</h2>
+
+{% if perms.farm.add_saleitem %}
+<p>
+    <a href="{% url 'sale_item_create' %}">
+        Add Sale Item
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Invoice, customer, crop, or plot"
+        >
+    </p>
+
+    <p>
+        <label for="sale">Filter by sale:</label>
+
+        <select id="sale" name="sale">
+
+            <option value="">All Sales</option>
+
+            {% for item in sales %}
+                <option
+                    value="{{ item.sale_id }}"
+                    {% if item.sale_id|stringformat:"s" == sale_id %}selected{% endif %}
+                >
+                    {{ item.invoice_number }}
+                    - {{ item.customer.full_name }}
+                    - {{ item.sale_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="harvest">Filter by harvest:</label>
+
+        <select id="harvest" name="harvest">
+
+            <option value="">All Harvests</option>
+
+            {% for item in harvests %}
+                <option
+                    value="{{ item.harvest_id }}"
+                    {% if item.harvest_id|stringformat:"s" == harvest_id %}selected{% endif %}
+                >
+                    {{ item.crop.crop_type }}
+                    - Plot {{ item.crop.plot_number }}
+                    - {{ item.harvest_date }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'sale_item_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Invoice</th>
+            <th>Customer</th>
+            <th>Harvest</th>
+            <th>Quantity Sold</th>
+            <th>Unit Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in sale_items %}
+
+        <tr>
+
+            <td>
+                {{ item.sale.invoice_number }}
+            </td>
+
+            <td>
+                {{ item.sale.customer.full_name }}
+            </td>
+
+            <td>
+                {{ item.harvest.crop.crop_type }}
+                - Plot {{ item.harvest.crop.plot_number }}
+                - {{ item.harvest.harvest_date }}
+            </td>
+
+            <td>
+                {{ item.quantity_sold }}
+            </td>
+
+            <td>
+                {{ item.unit_price }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_saleitem %}
+                    <a href="{% url 'sale_item_update' item.sale_item_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_saleitem %}
+                    <form
+                        method="post"
+                        action="{% url 'sale_item_delete' item.sale_item_id %}"
+                        style="display: inline"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="6">
+                No sale items found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+================================================================================
+farm_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Farm</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ farm.farm_name }}</strong>?
+</p>
+
+<p>Location: {{ farm.location }}</p>
+
+<p>Total Size: {{ farm.total_size }}</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'farm_list' %}"> Cancel </a>
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+crop_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Crop</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ crop.crop_type }} - {{ crop.plot_number }}</strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'crop_list' %}">Cancel</a>
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+worker_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Worker</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong> {{ worker.fname }} {{ worker.lname }} </strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'worker_list' %}">Cancel</a>
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+equipment_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Equipment</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ equipment.equipment_name }}</strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'equipment_list' %}">Cancel</a>
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+customer_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Customer</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong>{{ customer.full_name }}</strong>?
+</p>
+
+<p>Contact: {{ customer.contact_details }}</p>
+
+<p>Address: {{ customer.address }}</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'customer_list' %}"> Cancel </a>
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+fertilizer_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Fertilizer</h2>
+
+<p>
+    Are you sure you want to delete
+    <strong>{{ fertilizer.fertilizer_type }}</strong>?
+</p>
+
+<p>
+    Stock Level: {{ fertilizer.stock_level }}
+    {{ fertilizer.unit }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'fertilizer_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+
+================================================================================
+fertilizer_usage_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Fertilizer Usage</h2>
+
+<p>
+    Are you sure you want to delete this fertilizer usage record?
+</p>
+
+<p>
+    <strong>Fertilizer:</strong>
+    {{ usage.fertilizer.fertilizer_type }}
+</p>
+
+<p>
+    <strong>Crop:</strong>
+    {{ usage.crop.crop_type }}
+    - Plot {{ usage.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Quantity:</strong>
+    {{ usage.quantity_used }}
+</p>
+
+<p>
+    <strong>Usage Date:</strong>
+    {{ usage.usage_date }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'fertilizer_usage_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+equipment_assignment_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Equipment Assignment</h2>
+
+<p>
+    Are you sure you want to delete this equipment assignment?
+</p>
+
+<p>
+    <strong>Equipment:</strong>
+    {{ assignment.equipment.equipment_name }}
+</p>
+
+<p>
+    <strong>Worker:</strong>
+    {{ assignment.worker.fname }}
+    {{ assignment.worker.lname }}
+</p>
+
+<p>
+    <strong>Assigned Date:</strong>
+    {{ assignment.assigned_date }}
+</p>
+
+<p>
+    <strong>Return Date:</strong>
+    {% if assignment.return_date %}
+        {{ assignment.return_date }}
+    {% else %}
+        Active
+    {% endif %}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'equipment_assignment_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+equipment_maintenance_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Equipment Maintenance</h2>
+
+<p>
+    Are you sure you want to delete this maintenance record?
+</p>
+
+<p>
+    <strong>Equipment:</strong>
+    {{ maintenance.equipment.equipment_name }}
+</p>
+
+<p>
+    <strong>Maintenance Date:</strong>
+    {{ maintenance.maintenance_date }}
+</p>
+
+<p>
+    <strong>Description:</strong>
+    {{ maintenance.description }}
+</p>
+
+<p>
+    <strong>Status:</strong>
+    {{ maintenance.status }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'equipment_maintenance_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+crop_worker_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Crop Worker Assignment</h2>
+
+<p>
+    Are you sure you want to delete this crop worker assignment?
+</p>
+
+<p>
+    <strong>Crop:</strong>
+    {{ assignment.crop.crop_type }}
+    - Plot {{ assignment.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Worker:</strong>
+    {{ assignment.worker.fname }}
+    {{ assignment.worker.lname }}
+</p>
+
+<p>
+    <strong>Assigned Date:</strong>
+    {{ assignment.assigned_date }}
+</p>
+
+<p>
+    <strong>Task Role:</strong>
+    {{ assignment.task_role }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'crop_worker_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+harvest_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Harvest</h2>
+
+<p>
+    Are you sure you want to delete this harvest record?
+</p>
+
+<p>
+    <strong>Crop:</strong>
+    {{ harvest.crop.crop_type }}
+    - Plot {{ harvest.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Harvest Date:</strong>
+    {{ harvest.harvest_date }}
+</p>
+
+<p>
+    <strong>Quantity:</strong>
+    {{ harvest.quantity }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'harvest_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+harvest_worker_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Harvest Worker Assignment</h2>
+
+<p>
+    Are you sure you want to delete this harvest worker assignment?
+</p>
+
+<p>
+    <strong>Harvest:</strong>
+    {{ assignment.harvest.crop.crop_type }}
+    - Plot {{ assignment.harvest.crop.plot_number }}
+    - {{ assignment.harvest.harvest_date }}
+</p>
+
+<p>
+    <strong>Worker:</strong>
+    {{ assignment.worker.fname }}
+    {{ assignment.worker.lname }}
+</p>
+
+<p>
+    <strong>Assigned Date:</strong>
+    {{ assignment.assigned_date }}
+</p>
+
+<p>
+    <strong>Task Role:</strong>
+    {{ assignment.task_role }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'harvest_worker_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+sale_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Sale</h2>
+
+<p>
+    Are you sure you want to delete this sale?
+</p>
+
+<p>
+    <strong>Customer:</strong>
+    {{ sale.customer.full_name }}
+</p>
+
+<p>
+    <strong>Sale Date:</strong>
+    {{ sale.sale_date }}
+</p>
+
+<p>
+    <strong>Invoice Number:</strong>
+    {{ sale.invoice_number }}
+</p>
+
+<p>
+    <strong>Total Amount:</strong>
+    {{ sale.total_amount }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'sale_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+
+================================================================================
+sale_item_confirm_delete.html
+================================================================================
+
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Sale Item</h2>
+
+<p>
+    Are you sure you want to delete this sale item?
+</p>
+
+<p>
+    <strong>Invoice:</strong>
+    {{ sale_item.sale.invoice_number }}
+</p>
+
+<p>
+    <strong>Customer:</strong>
+    {{ sale_item.sale.customer.full_name }}
+</p>
+
+<p>
+    <strong>Harvest:</strong>
+    {{ sale_item.harvest.crop.crop_type }}
+    - Plot {{ sale_item.harvest.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Quantity Sold:</strong>
+    {{ sale_item.quantity_sold }}
+</p>
+
+<p>
+    <strong>Unit Price:</strong>
+    {{ sale_item.unit_price }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'sale_item_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
+
+

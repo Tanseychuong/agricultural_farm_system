@@ -1,0 +1,51 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Sale Item</h2>
+
+<p>
+    Are you sure you want to delete this sale item?
+</p>
+
+<p>
+    <strong>Invoice:</strong>
+    {{ sale_item.sale.invoice_number }}
+</p>
+
+<p>
+    <strong>Customer:</strong>
+    {{ sale_item.sale.customer.full_name }}
+</p>
+
+<p>
+    <strong>Harvest:</strong>
+    {{ sale_item.harvest.crop.crop_type }}
+    - Plot {{ sale_item.harvest.crop.plot_number }}
+</p>
+
+<p>
+    <strong>Quantity Sold:</strong>
+    {{ sale_item.quantity_sold }}
+</p>
+
+<p>
+    <strong>Unit Price:</strong>
+    {{ sale_item.unit_price }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'sale_item_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

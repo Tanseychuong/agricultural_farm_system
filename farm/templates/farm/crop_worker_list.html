@@ -1,0 +1,164 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Crop Worker Management</h2>
+
+{% if perms.farm.add_cropworker %}
+<p>
+    <a href="{% url 'crop_worker_create' %}">
+        Add Crop Worker
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Crop, plot, worker, or task role"
+        >
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option
+                    value="{{ item.crop_id }}"
+                    {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}
+                >
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="worker">Filter by worker:</label>
+
+        <select id="worker" name="worker">
+
+            <option value="">All Workers</option>
+
+            {% for item in workers %}
+                <option
+                    value="{{ item.worker_id }}"
+                    {% if item.worker_id|stringformat:"s" == worker_id %}selected{% endif %}
+                >
+                    {{ item.fname }} {{ item.lname }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="task_role">Filter by task role:</label>
+
+        <select id="task_role" name="task_role">
+
+            <option value="">All Task Roles</option>
+
+            {% for item in task_roles %}
+                <option
+                    value="{{ item }}"
+                    {% if item == task_role %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'crop_worker_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Crop</th>
+            <th>Worker</th>
+            <th>Assigned Date</th>
+            <th>Task Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>
+                {{ assignment.crop.crop_type }}
+                - Plot {{ assignment.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ assignment.worker.fname }}
+                {{ assignment.worker.lname }}
+            </td>
+
+            <td>
+                {{ assignment.assigned_date }}
+            </td>
+
+            <td>
+                {{ assignment.task_role }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_cropworker %}
+                    <a href="{% url 'crop_worker_update' assignment.crop_worker_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_cropworker %}
+                    <a href="{% url 'crop_worker_delete' assignment.crop_worker_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No crop worker assignments found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

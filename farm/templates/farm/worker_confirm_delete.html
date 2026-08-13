@@ -1,0 +1,18 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Delete Worker</h2>
+
+<p>
+  Are you sure you want to delete
+  <strong> {{ worker.fname }} {{ worker.lname }} </strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Yes, Delete</button>
+
+  <a href="{% url 'worker_list' %}">Cancel</a>
+</form>
+
+{% endblock %}

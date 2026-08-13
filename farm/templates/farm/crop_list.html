@@ -1,0 +1,8 @@
+{% extends "farm/base.html" %}
+{% block page_title %}Crops{% endblock %}
+{% block content %}
+<h2>Crop management</h2>
+{% if perms.farm.add_crop %}<p><a href="{% url 'crop_create' %}">Add crop</a></p>{% endif %}
+<form method="get"><p><label for="search">Search crops</label><input id="search" name="search" value="{{ search }}" placeholder="Crop type"></p><p><label for="status">Status</label><select id="status" name="status"><option value="">All statuses</option>{% for item in statuses %}<option value="{{ item }}" {% if item == selected_status %}selected{% endif %}>{{ item }}</option>{% endfor %}</select></p><button type="submit">Apply filters</button><a href="{% url 'crop_list' %}">Clear</a></form>
+<table><thead><tr><th>Crop</th><th>Farm</th><th>Plot</th><th>Planted</th><th>Expected harvest</th><th>Status</th><th>Actions</th></tr></thead><tbody>{% for crop in crops %}<tr><td>{{ crop.crop_type }}</td><td>{{ crop.farm.farm_name }}</td><td>{{ crop.plot_number }}</td><td>{{ crop.planting_date }}</td><td>{{ crop.expected_harvest_date }}</td><td>{{ crop.status }}</td><td>{% if perms.farm.change_crop %}<a href="{% url 'crop_update' crop.crop_id %}">Edit</a>{% endif %}{% if perms.farm.delete_crop %}<a href="{% url 'crop_delete' crop.crop_id %}">Delete</a>{% endif %}</td></tr>{% empty %}<tr><td colspan="7">No crops match your filters.</td></tr>{% endfor %}</tbody></table>
+{% endblock %}

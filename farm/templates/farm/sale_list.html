@@ -1,0 +1,124 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Sale Management</h2>
+
+{% if perms.farm.add_sale %}
+<p>
+    <a href="{% url 'sale_create' %}">
+        Add Sale
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Customer or invoice number"
+        >
+    </p>
+
+    <p>
+        <label for="customer">Filter by customer:</label>
+
+        <select id="customer" name="customer">
+
+            <option value="">All Customers</option>
+
+            {% for item in customers %}
+                <option
+                    value="{{ item.customer_id }}"
+                    {% if item.customer_id|stringformat:"s" == customer_id %}selected{% endif %}
+                >
+                    {{ item.full_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'sale_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Sale Date</th>
+            <th>Invoice Number</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for sale in sales %}
+
+        <tr>
+
+            <td>
+                {{ sale.customer.full_name }}
+            </td>
+
+            <td>
+                {{ sale.sale_date }}
+            </td>
+
+            <td>
+                {{ sale.invoice_number }}
+            </td>
+
+            <td>
+                {{ sale.total_amount }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_sale %}
+                    <a href="{% url 'sale_update' sale.sale_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_sale %}
+                    <a href="{% url 'sale_delete' sale.sale_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No sales found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

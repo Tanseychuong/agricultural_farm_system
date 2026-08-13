@@ -1,0 +1,50 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Delete Equipment Assignment</h2>
+
+<p>
+    Are you sure you want to delete this equipment assignment?
+</p>
+
+<p>
+    <strong>Equipment:</strong>
+    {{ assignment.equipment.equipment_name }}
+</p>
+
+<p>
+    <strong>Worker:</strong>
+    {{ assignment.worker.fname }}
+    {{ assignment.worker.lname }}
+</p>
+
+<p>
+    <strong>Assigned Date:</strong>
+    {{ assignment.assigned_date }}
+</p>
+
+<p>
+    <strong>Return Date:</strong>
+    {% if assignment.return_date %}
+        {{ assignment.return_date }}
+    {% else %}
+        Active
+    {% endif %}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit">
+        Yes, Delete
+    </button>
+
+    <a href="{% url 'equipment_assignment_list' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

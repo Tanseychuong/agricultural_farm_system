@@ -1,0 +1,138 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Fertilizer Usage Management</h2>
+
+{% if perms.farm.add_fertilizerusage %}
+<p>
+    <a href="{% url 'fertilizer_usage_create' %}">
+        Add Fertilizer Usage
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Fertilizer type or crop"
+        >
+    </p>
+
+    <p>
+        <label for="fertilizer">Filter by fertilizer:</label>
+
+        <select id="fertilizer" name="fertilizer">
+
+            <option value="">All Fertilizers</option>
+
+            {% for item in fertilizers %}
+                <option value="{{ item.fertilizer_id }}" {% if item.fertilizer_id|stringformat:"s" == fertilizer_id %}selected{% endif %}>
+                    {{ item.fertilizer_type }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="crop">Filter by crop:</label>
+
+        <select id="crop" name="crop">
+
+            <option value="">All Crops</option>
+
+            {% for item in crops %}
+                <option value="{{ item.crop_id }}" {% if item.crop_id|stringformat:"s" == crop_id %}selected{% endif %}>
+                    {{ item.crop_type }} - Plot {{ item.plot_number }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'fertilizer_usage_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Fertilizer</th>
+            <th>Crop</th>
+            <th>Quantity Used</th>
+            <th>Usage Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for usage in usages %}
+
+        <tr>
+
+            <td>
+                {{ usage.fertilizer.fertilizer_type }}
+            </td>
+
+            <td>
+                {{ usage.crop.crop_type }}
+                - Plot {{ usage.crop.plot_number }}
+            </td>
+
+            <td>
+                {{ usage.quantity_used }}
+            </td>
+
+            <td>
+                {{ usage.usage_date }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_fertilizerusage %}
+                    <a href="{% url 'fertilizer_usage_update' usage.usage_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_fertilizerusage %}
+                    <a href="{% url 'fertilizer_usage_delete' usage.usage_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No fertilizer usage records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

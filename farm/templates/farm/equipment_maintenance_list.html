@@ -1,0 +1,143 @@
+{% extends "farm/base.html" %}
+
+{% block content %}
+
+<h2>Equipment Maintenance Management</h2>
+
+{% if perms.farm.add_equipmentmaintenance %}
+<p>
+    <a href="{% url 'equipment_maintenance_create' %}">
+        Add Equipment Maintenance
+    </a>
+</p>
+{% endif %}
+
+<form method="get">
+
+    <p>
+        <label for="search">Search:</label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search }}"
+            placeholder="Equipment or description"
+        >
+    </p>
+
+    <p>
+        <label for="equipment">Filter by equipment:</label>
+
+        <select id="equipment" name="equipment">
+
+            <option value="">All Equipment</option>
+
+            {% for item in equipment %}
+                <option
+                    value="{{ item.equipment_id }}"
+                    {% if item.equipment_id|stringformat:"s" == equipment_id %}selected{% endif %}
+                >
+                    {{ item.equipment_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <p>
+        <label for="status">Filter by status:</label>
+
+        <select id="status" name="status">
+
+            <option value="">All Statuses</option>
+
+            {% for item in statuses %}
+                <option
+                    value="{{ item }}"
+                    {% if item == status %}selected{% endif %}
+                >
+                    {{ item }}
+                </option>
+            {% endfor %}
+
+        </select>
+    </p>
+
+    <button type="submit">
+        Search / Filter
+    </button>
+
+    <a href="{% url 'equipment_maintenance_list' %}">
+        Clear
+    </a>
+
+</form>
+
+<br>
+
+<table border="1">
+
+    <thead>
+        <tr>
+            <th>Equipment</th>
+            <th>Maintenance Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for maintenance in maintenances %}
+
+        <tr>
+
+            <td>
+                {{ maintenance.equipment.equipment_name }}
+            </td>
+
+            <td>
+                {{ maintenance.maintenance_date }}
+            </td>
+
+            <td>
+                {{ maintenance.description }}
+            </td>
+
+            <td>
+                {{ maintenance.status }}
+            </td>
+
+            <td>
+
+                {% if perms.farm.change_equipmentmaintenance %}
+                    <a href="{% url 'equipment_maintenance_update' maintenance.maintenance_id %}">
+                        Edit
+                    </a>
+                {% endif %}
+
+                {% if perms.farm.delete_equipmentmaintenance %}
+                    <a href="{% url 'equipment_maintenance_delete' maintenance.maintenance_id %}">Delete</a>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="5">
+                No equipment maintenance records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

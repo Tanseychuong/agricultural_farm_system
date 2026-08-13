@@ -1,0 +1,87 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>Farm Management</h2>
+
+{% if perms.farm.add_farm %}
+<p>
+  <a href="{% url 'farm_create' %}">Add Farm</a>
+</p>
+{% endif %}
+
+<form method="get">
+  <p>
+    <label for="search">Search:</label>
+
+    <input
+      type="text"
+      id="search"
+      name="search"
+      value="{{ search }}"
+      placeholder="Farm name or location"
+    />
+  </p>
+
+  <p>
+    <label for="location">Filter by location:</label>
+
+    <select id="location" name="location">
+      <option value="">All Locations</option>
+
+      {% for item in locations %}
+      <option
+        value="{{ item }}"
+        {% if item == location %}selected{% endif %}
+      >
+        {{ item }}
+      </option>
+      {% endfor %}
+    </select>
+  </p>
+
+  <button type="submit">Search / Filter</button>
+
+  <a href="{% url 'farm_list' %}"> Clear </a>
+</form>
+
+<br />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Farm Name</th>
+      <th>Location</th>
+      <th>Total Size</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for farm in farms %}
+
+    <tr>
+      <td>{{ farm.farm_name }}</td>
+
+      <td>{{ farm.location }}</td>
+
+      <td>{{ farm.total_size }}</td>
+
+      <td>
+        {% if perms.farm.change_farm %}
+        <a href="{% url 'farm_update' farm.farm_id %}"> Edit </a>
+        {% endif %} {% if perms.farm.delete_farm %}
+        <a href="{% url 'farm_delete' farm.farm_id %}">Delete</a>
+        {% endif %}
+      </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+      <td colspan="4">No farms found.</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
