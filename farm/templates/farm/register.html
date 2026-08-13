@@ -7,24 +7,25 @@
             <span style="color: green">Farm<span>Management</span></span>
         </a>
 
-        <h2>Welcome back</h2>
+        <h2>Create an account</h2>
 
-        <p>Sign in to manage your farm operation.</p>
+        <p>Register for access to the farm operation you've been assigned to.</p>
 
         <form method="post">
             {% csrf_token %}
 
             {{ form.as_p }}
 
-            <button type="submit">Sign in</button>
+            <button type="submit">Create account</button>
         </form>
 
         {% if form.errors %}
         <p class="login-error">
-            Invalid username or password. Please try again.
+            Please correct the errors below and try again.
         </p>
         {% endif %}
-        <p><a href="{% url 'register' %}">Need an account? Register</a></p>
+
+        <p><a href="{% url 'login' %}">Already have an account? Sign in</a></p>
     </section>
 </main>
 {% endblock %}
