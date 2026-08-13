@@ -104,7 +104,7 @@ from farm.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-# Authentication
+# Authentication Path
     path("login/", FarmLoginView.as_view(), name="login"),
     path("logout/", FarmLogoutView.as_view(), name="logout"),
     path("register/", register, name="register"),
