@@ -28,10 +28,7 @@
     <tr>
         <td>{{ u.username }}{% if u.is_superuser %} (superuser){% endif %}</td>
         <td>{{ u.email }}</td>
-        <td>
-            {% for group in u.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor
-            %}
-        </td>
+        <td>{{ u.groups.all|join:", "|default:"—" }}</td>
         <td>{% if u.is_active %}Yes{% else %}No{% endif %}</td>
 
         <td>

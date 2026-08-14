@@ -24,7 +24,8 @@
             Invalid username or password. Please try again.
         </p>
         {% endif %}
-        <p><a href="{% url 'register' %}">Need an account? Register</a></p>
+
+        <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
     </section>
 </main>
 {% endblock %}
