@@ -5,22 +5,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}Agricultural{% endblock %} - Farm Management</title>
+
+    <!--
+        Theme initialization.
+
+        This runs before app.css loads so the page starts in the
+        correct theme without flashing the wrong one.
+
+        Stored values:
+        - light = explicit light mode
+        - dark  = explicit dark mode
+        - missing = automatic/system mode
+    -->
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem("theme");
+
+                if (stored === "light" || stored === "dark") {
+                    document.documentElement.setAttribute("data-theme", stored);
+                }
+            } catch (error) {
+                // If localStorage is unavailable, simply use system theme.
+            }
+        })();
+    </script>
+
     <link rel="stylesheet" href="{% static 'farm/app.css' %}">
 </head>
 
 <body>
+
     {% if user.is_authenticated %}
+
     <div class="app-shell">
+
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
         <aside class="sidebar" id="sidebar">
+
             <a class="brand" href="{% url 'dashboard' %}">
                 <span class="brand-mark"></span>
-                <span>Farm<span>Management</span></span>
+                <span>
+                    Farm<span>Management</span>
+                </span>
             </a>
 
             <p class="sidebar-label">Overview</p>
 
             <nav>
+
                 <a href="{% url 'dashboard' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}">
                     Dashboard
@@ -29,111 +66,288 @@
                 <p class="sidebar-label">Farm operations</p>
 
                 {% if perms.farm.view_farm %}
-                <a href="{% url 'farm_list' %}" class="nav-link">Farms</a>
+                <a href="{% url 'farm_list' %}" class="nav-link">
+                    Farms
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_crop %}
-                <a href="{% url 'crop_list' %}" class="nav-link">Crops</a>
+                <a href="{% url 'crop_list' %}" class="nav-link">
+                    Crops
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_worker %}
-                <a href="{% url 'worker_list' %}" class="nav-link">Workers</a>
+                <a href="{% url 'worker_list' %}" class="nav-link">
+                    Workers
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_equipment %}
-                <a href="{% url 'equipment_list' %}" class="nav-link">Equipment</a>
+                <a href="{% url 'equipment_list' %}" class="nav-link">
+                    Equipment
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_fertilizer %}
-                <a href="{% url 'fertilizer_list' %}" class="nav-link">Fertilizer</a>
+                <a href="{% url 'fertilizer_list' %}" class="nav-link">
+                    Fertilizer
+                </a>
                 {% endif %}
 
                 <p class="sidebar-label">Production</p>
 
                 {% if perms.farm.view_harvest %}
-                <a href="{% url 'harvest_list' %}" class="nav-link">Harvest</a>
+                <a href="{% url 'harvest_list' %}" class="nav-link">
+                    Harvest
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_fertilizerusage %}
-                <a href="{% url 'fertilizer_usage_list' %}" class="nav-link">Fertilizer usage</a>
+                <a href="{% url 'fertilizer_usage_list' %}" class="nav-link">
+                    Fertilizer usage
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_cropworker %}
-                <a href="{% url 'crop_worker_list' %}" class="nav-link">Crop workers</a>
+                <a href="{% url 'crop_worker_list' %}" class="nav-link">
+                    Crop workers
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_harvestworker %}
-                <a href="{% url 'harvest_worker_list' %}" class="nav-link">Harvest workers</a>
+                <a href="{% url 'harvest_worker_list' %}" class="nav-link">
+                    Harvest workers
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_equipmentassignment %}
-                <a href="{% url 'equipment_assignment_list' %}" class="nav-link">Assignments</a>
+                <a href="{% url 'equipment_assignment_list' %}" class="nav-link">
+                    Assignments
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_equipmentmaintenance %}
-                <a href="{% url 'equipment_maintenance_list' %}" class="nav-link">Maintenance</a>
+                <a href="{% url 'equipment_maintenance_list' %}" class="nav-link">
+                    Maintenance
+                </a>
                 {% endif %}
 
                 <p class="sidebar-label">Sales</p>
 
                 {% if perms.farm.view_customer %}
-                <a href="{% url 'customer_list' %}" class="nav-link">Customers</a>
+                <a href="{% url 'customer_list' %}" class="nav-link">
+                    Customers
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_sale %}
-                <a href="{% url 'sale_list' %}" class="nav-link">Sales</a>
+                <a href="{% url 'sale_list' %}" class="nav-link">
+                    Sales
+                </a>
                 {% endif %}
 
                 {% if perms.farm.view_saleitem %}
-                <a href="{% url 'sale_item_list' %}" class="nav-link">Sale items</a>
+                <a href="{% url 'sale_item_list' %}" class="nav-link">
+                    Sale items
+                </a>
                 {% endif %}
 
                 {% if user.is_superuser %}
                 <p class="sidebar-label">Administration</p>
-                <a href="{% url 'user_list' %}" class="nav-link">Users</a>
+
+                <a href="{% url 'user_list' %}" class="nav-link">
+                    Users
+                </a>
                 {% endif %}
+
             </nav>
         </aside>
 
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
         <main class="main-area">
+
             <header class="topbar">
-                <button class="menu-button" aria-label="Open navigation"
+
+                <button class="menu-button" type="button" aria-label="Open navigation"
                     onclick="document.body.classList.toggle('nav-open')">
                     Menu
                 </button>
 
                 <div>
-                    <p class="eyebrow">Agricultural operations</p>
-                    <h1>{% block page_title %}FarmManagement{% endblock %}</h1>
+                    <p class="eyebrow">
+                        Agricultural operations
+                    </p>
+
+                    <h1>
+                        {% block page_title %}FarmManagement{% endblock %}
+                    </h1>
                 </div>
 
+
                 <div class="user-menu">
+
+                    <!-- Theme toggle -->
+                    <button type="button" id="theme-toggle-btn" class="theme-toggle" onclick="cycleTheme()"
+                        title="Cycles: Auto → Light → Dark">
+                        Auto
+                    </button>
+
+
                     <span class="user-avatar">
                         {{ user.username|slice:':1'|upper }}
                     </span>
 
+
                     <div>
-                        <strong>{{ user.username }}</strong>
+                        <strong>
+                            {{ user.username }}
+                        </strong>
 
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button class="logout" type="submit">Sign out</button>
+
+                            <button class="logout" type="submit">
+                                Sign out
+                            </button>
                         </form>
                     </div>
+
                 </div>
+
             </header>
 
+
             <section class="page-content">
+
                 {% endif %}
 
                 {% block content %}
                 {% endblock %}
 
                 {% if user.is_authenticated %}
+
             </section>
+
         </main>
+
     </div>
+
     {% endif %}
+
+
+    <!-- =========================
+         THEME JAVASCRIPT
+    ========================== -->
+    <script>
+        (function () {
+
+            function getTheme() {
+                try {
+                    return localStorage.getItem("theme");
+                } catch (error) {
+                    return null;
+                }
+            }
+
+
+            function setTheme(theme) {
+
+                try {
+
+                    if (theme === "light" || theme === "dark") {
+                        localStorage.setItem("theme", theme);
+                        document.documentElement.setAttribute(
+                            "data-theme",
+                            theme
+                        );
+                    } else {
+                        localStorage.removeItem("theme");
+                        document.documentElement.removeAttribute(
+                            "data-theme"
+                        );
+                    }
+
+                } catch (error) {
+
+                    if (theme === "light" || theme === "dark") {
+                        document.documentElement.setAttribute(
+                            "data-theme",
+                            theme
+                        );
+                    } else {
+                        document.documentElement.removeAttribute(
+                            "data-theme"
+                        );
+                    }
+                }
+
+                updateThemeToggleLabel();
+            }
+
+
+            window.cycleTheme = function () {
+
+                var current = getTheme();
+                var next;
+
+                if (current === "light") {
+                    next = "dark";
+                } else if (current === "dark") {
+                    next = null;
+                } else {
+                    next = "light";
+                }
+
+                setTheme(next);
+            };
+
+
+            function updateThemeToggleLabel() {
+
+                var button = document.getElementById(
+                    "theme-toggle-btn"
+                );
+
+                if (!button) {
+                    return;
+                }
+
+                var current = getTheme();
+
+                if (current === "light") {
+                    button.textContent = "Light";
+                    button.setAttribute(
+                        "aria-label",
+                        "Theme: Light. Click for Dark."
+                    );
+                } else if (current === "dark") {
+                    button.textContent = "Dark";
+                    button.setAttribute(
+                        "aria-label",
+                        "Theme: Dark. Click for Auto."
+                    );
+                } else {
+                    button.textContent = "Auto";
+                    button.setAttribute(
+                        "aria-label",
+                        "Theme: Auto. Click for Light."
+                    );
+                }
+            }
+
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                updateThemeToggleLabel
+            );
+
+        })();
+    </script>
+
 </body>
 
 </html>

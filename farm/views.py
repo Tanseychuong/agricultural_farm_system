@@ -141,10 +141,29 @@ def user_delete(request, user_id):
         },
     )
 
-
 @login_required
 def dashboard(request):
-    return render(request, "farm/dashboard.html")
+    # Only counted (and only shown) for entities the user actually has
+    # view access to — mirrors the same perms.farm.view_x checks the
+    # template already uses to decide which cards render at all.
+    count_sources = [
+        ("farm", "farm.view_farm", Farm),
+        ("crop", "farm.view_crop", Crop),
+        ("worker", "farm.view_worker", Worker),
+        ("equipment", "farm.view_equipment", Equipment),
+        ("fertilizer", "farm.view_fertilizer", Fertilizer),
+        ("harvest", "farm.view_harvest", Harvest),
+        ("customer", "farm.view_customer", Customer),
+        ("sale", "farm.view_sale", Sale),
+    ]
+
+    counts = {
+        key: model.objects.count()
+        for key, perm, model in count_sources
+        if request.user.has_perm(perm)
+    }
+
+    return render(request, "farm/dashboard.html", {"counts": counts})
 
 @login_required
 @permission_required("farm.view_crop", raise_exception=True)
@@ -1863,3 +1882,4 @@ def sale_item_delete(request, sale_item_id):
             "sale_item": sale_item,
         },
     )
+

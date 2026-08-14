@@ -2,16 +2,76 @@
 {% block page_title %}Dashboard{% endblock %}
 {% block content %}
 <section class="dashboard-hero">
-  <div><p class="eyebrow">Operations workspace</p><h2>Welcome back, {{ user.username }}.</h2><p>Manage every part of your farm operation from one focused workspace.</p></div>
+  <div>
+    <p class="eyebrow">Operations workspace</p>
+    <h2>Welcome back, {{ user.username }}.</h2>
+    <p>Manage every part of your farm operation from one focused workspace.</p>
+  </div>
 </section>
+
 <div class="dashboard-grid">
-  {% if perms.farm.view_farm %}<a class="dash-card" href="{% url 'farm_list' %}"><span class="icon">01</span><strong>Farms</strong><small>Land, locations and capacity</small></a>{% endif %}
-  {% if perms.farm.view_crop %}<a class="dash-card" href="{% url 'crop_list' %}"><span class="icon">02</span><strong>Crops</strong><small>Plots and growing schedules</small></a>{% endif %}
-  {% if perms.farm.view_worker %}<a class="dash-card" href="{% url 'worker_list' %}"><span class="icon">03</span><strong>Workers</strong><small>Your field operations team</small></a>{% endif %}
-  {% if perms.farm.view_equipment %}<a class="dash-card" href="{% url 'equipment_list' %}"><span class="icon">04</span><strong>Equipment</strong><small>Assets and availability</small></a>{% endif %}
-  {% if perms.farm.view_fertilizer %}<a class="dash-card" href="{% url 'fertilizer_list' %}"><span class="icon">05</span><strong>Fertilizer</strong><small>Stock and inventory</small></a>{% endif %}
-  {% if perms.farm.view_harvest %}<a class="dash-card" href="{% url 'harvest_list' %}"><span class="icon">06</span><strong>Harvests</strong><small>Production records</small></a>{% endif %}
-  {% if perms.farm.view_customer %}<a class="dash-card" href="{% url 'customer_list' %}"><span class="icon">07</span><strong>Customers</strong><small>Buyer relationships</small></a>{% endif %}
-  {% if perms.farm.view_sale %}<a class="dash-card" href="{% url 'sale_list' %}"><span class="icon">08</span><strong>Sales</strong><small>Invoices and revenue</small></a>{% endif %}
+  {% if perms.farm.view_farm %}
+  <a class="dash-card" href="{% url 'farm_list' %}">
+    <span class="stat">{{ counts.farm }}</span>
+    <strong>Farms</strong>
+    <small>Land, locations and capacity</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_crop %}
+  <a class="dash-card" href="{% url 'crop_list' %}">
+    <span class="stat">{{ counts.crop }}</span>
+    <strong>Crops</strong>
+    <small>Plots and growing schedules</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_worker %}
+  <a class="dash-card" href="{% url 'worker_list' %}">
+    <span class="stat">{{ counts.worker }}</span>
+    <strong>Workers</strong>
+    <small>Your field operations team</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_equipment %}
+  <a class="dash-card" href="{% url 'equipment_list' %}">
+    <span class="stat">{{ counts.equipment }}</span>
+    <strong>Equipment</strong>
+    <small>Assets and availability</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_fertilizer %}
+  <a class="dash-card" href="{% url 'fertilizer_list' %}">
+    <span class="stat">{{ counts.fertilizer }}</span>
+    <strong>Fertilizer</strong>
+    <small>Stock and inventory</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_harvest %}
+  <a class="dash-card" href="{% url 'harvest_list' %}">
+    <span class="stat">{{ counts.harvest }}</span>
+    <strong>Harvests</strong>
+    <small>Production records</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_customer %}
+  <a class="dash-card" href="{% url 'customer_list' %}">
+    <span class="stat">{{ counts.customer }}</span>
+    <strong>Customers</strong>
+    <small>Buyer relationships</small>
+  </a>
+  {% endif %}
+
+  {% if perms.farm.view_sale %}
+  <a class="dash-card" href="{% url 'sale_list' %}">
+    <span class="stat">{{ counts.sale }}</span>
+    <strong>Sales</strong>
+    <small>Invoices and revenue</small>
+  </a>
+  {% endif %}
 </div>
 {% endblock %}
