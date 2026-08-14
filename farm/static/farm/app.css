@@ -1,213 +1,81 @@
-/* =========================================================
-   THEME VARIABLES
-   ========================================================= */
-
 :root {
-    --green: #a1b6af;
-    --green-2: #8ba49b;
+    --green: #174c3a;
+    --green-2: #21634b;
     --mint: #e9f3eb;
-
-    --avatar-text: #6f8c80;
-
+    --avatar-text: var(--green);
     --ink: #1c2923;
     --muted: #718078;
-
     --line: #dce5de;
     --line-soft: #edf1ee;
     --line-strong: #b9cdbd;
-
-    --paper: #ffffff;
+    --paper: #fff;
     --ground: #f5f7f4;
     --surface-alt: #f8faf8;
     --hover-bg: #fafcfb;
     --input-border: #cbd7ce;
-
-    --shadow-color: rgba(25, 43, 29, 0.03);
-    --shadow-color-strong: rgba(25, 43, 29, 0.06);
-
+    --shadow-color: #192b1d08;
+    --shadow-color-strong: #192b1d0d;
     --th-text: #526057;
     --danger: #b23838;
-
-    /* Sidebar */
-    --sidebar-bg: #a1b6af;
-    --sidebar-text: #e8f1ea;
-    --sidebar-muted: #d4e3d8;
-    --sidebar-label: #dcebe0;
-    --sidebar-active: #899a94;
-
-    /* Buttons */
-    --button-text: #ffffff;
-
     color-scheme: light;
 }
 
-
-/* =========================================================
-   AUTO MODE
-   Follow operating system/browser preference
-   ========================================================= */
-
-@media (prefers-color-scheme: dark) {
-
-    :root:not([data-theme]) {
-
-        --green: #8fa99f;
-        --green-2: #78938a;
-        --mint: #23392d;
-
-        --avatar-text: #8fd39b;
-
-        --ink: #e6ece8;
-        --muted: #93a69b;
-
-        --line: #2a3d33;
-        --line-soft: #223028;
-        --line-strong: #3a4c40;
-
-        --paper: #17221b;
-        --ground: #0f1712;
-        --surface-alt: #1c2820;
-        --hover-bg: #1c2921;
-        --input-border: #33453a;
-
-        --shadow-color: rgba(0, 0, 0, 0.45);
-        --shadow-color-strong: rgba(0, 0, 0, 0.55);
-
-        --th-text: #8fa398;
-        --danger: #e2665f;
-
-        --sidebar-bg: #17221b;
-        --sidebar-text: #d9e5dd;
-        --sidebar-muted: #9eb0a5;
-        --sidebar-label: #a9c2b0;
-        --sidebar-active: #30443a;
-
-        --button-text: #ffffff;
-
-        color-scheme: dark;
-    }
-}
-
-
-/* =========================================================
-   EXPLICIT LIGHT MODE
-   ========================================================= */
-
-html[data-theme="light"] {
-
-    --green: #a1b6af;
-    --green-2: #8ba49b;
-    --mint: #e9f3eb;
-
-    --avatar-text: #6f8c80;
-
-    --ink: #1c2923;
-    --muted: #718078;
-
-    --line: #dce5de;
-    --line-soft: #edf1ee;
-    --line-strong: #b9cdbd;
-
-    --paper: #ffffff;
-    --ground: #f5f7f4;
-    --surface-alt: #f8faf8;
-    --hover-bg: #fafcfb;
-    --input-border: #cbd7ce;
-
-    --shadow-color: rgba(25, 43, 29, 0.03);
-    --shadow-color-strong: rgba(25, 43, 29, 0.06);
-
-    --th-text: #526057;
-    --danger: #b23838;
-
-    --sidebar-bg: #a1b6af;
-    --sidebar-text: #e8f1ea;
-    --sidebar-muted: #d4e3d8;
-    --sidebar-label: #dcebe0;
-    --sidebar-active: #899a94;
-
-    --button-text: #ffffff;
-
-    color-scheme: light;
-}
-
-
-/* =========================================================
-   EXPLICIT DARK MODE
-   ========================================================= */
-
+/* Dark mode — applied explicitly via data-theme="dark" on <html>,
+   OR automatically when the OS is in dark mode and the user hasn't
+   explicitly chosen "light" (see the inline theme script in base.html). */
 html[data-theme="dark"] {
-
-    --green: #8fa99f;
-    --green-2: #78938a;
     --mint: #23392d;
-
     --avatar-text: #8fd39b;
-
     --ink: #e6ece8;
     --muted: #93a69b;
-
     --line: #2a3d33;
     --line-soft: #223028;
     --line-strong: #3a4c40;
-
     --paper: #17221b;
     --ground: #0f1712;
     --surface-alt: #1c2820;
     --hover-bg: #1c2921;
     --input-border: #33453a;
-
     --shadow-color: rgba(0, 0, 0, 0.45);
     --shadow-color-strong: rgba(0, 0, 0, 0.55);
-
     --th-text: #8fa398;
     --danger: #e2665f;
-
-    --sidebar-bg: #17221b;
-    --sidebar-text: #d9e5dd;
-    --sidebar-muted: #9eb0a5;
-    --sidebar-label: #a9c2b0;
-    --sidebar-active: #30443a;
-
-    --button-text: #ffffff;
-
     color-scheme: dark;
 }
 
-
-/* =========================================================
-   GLOBAL
-   ========================================================= */
+@media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]):not([data-theme="dark"]) {
+        --mint: #23392d;
+        --avatar-text: #8fd39b;
+        --ink: #e6ece8;
+        --muted: #93a69b;
+        --line: #2a3d33;
+        --line-soft: #223028;
+        --line-strong: #3a4c40;
+        --paper: #17221b;
+        --ground: #0f1712;
+        --surface-alt: #1c2820;
+        --hover-bg: #1c2921;
+        --input-border: #33453a;
+        --shadow-color: rgba(0, 0, 0, 0.45);
+        --shadow-color-strong: rgba(0, 0, 0, 0.55);
+        --th-text: #8fa398;
+        --danger: #e2665f;
+        color-scheme: dark;
+    }
+}
 
 * {
     box-sizing: border-box;
 }
 
-html {
-    min-height: 100%;
-}
-
 body {
     margin: 0;
-    min-height: 100vh;
-
     background: var(--ground);
     color: var(--ink);
-
-    font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        "Segoe UI",
-        sans-serif;
-
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 14px;
     line-height: 1.5;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
 }
 
 a {
@@ -220,74 +88,54 @@ a:hover {
     text-decoration: underline;
 }
 
-
-/* =========================================================
-   APP SHELL
-   ========================================================= */
-
 .app-shell {
     min-height: 100vh;
     display: flex;
 }
 
-
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
-
 .sidebar {
     width: 252px;
     flex: none;
-
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-
+    background: var(--green);
+    color: #e8f1ea;
     padding: 24px 14px;
-
     position: sticky;
     top: 0;
-
     height: 100vh;
     overflow: auto;
 }
 
+/* Main FarmFlow brand */
 .brand {
     display: flex;
     gap: 10px;
     align-items: center;
-
-    color: var(--sidebar-text);
-
+    color: #2c630c;
     font-size: 22px;
     font-weight: 760;
     letter-spacing: -0.8px;
-
     padding: 0 11px 27px;
 }
 
 .brand span span {
-    color: var(--sidebar-muted);
+    color: #0d6c15;
 }
 
+
+/* F logo */
 .brand-mark {
     width: 31px;
     height: 31px;
-
     border-radius: 10px;
-
     background: #8fc495;
-    color: #ffffff;
-
+    color: #174c3a;
     display: grid;
     place-items: center;
-
     font-size: 18px;
     font-weight: 800;
 }
 
-
-/* Login brand */
-
+/* Login page brand */
 .login-card .brand {
     color: var(--green);
     padding: 0;
@@ -297,40 +145,23 @@ a:hover {
     color: var(--green-2);
 }
 
-.login-card .brand .brand-mark {
-    background: var(--green);
-}
-
-
-/* Sidebar labels */
-
 .sidebar-label {
-    color: var(--sidebar-label);
-
+    color: #a8c4af;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-
     font-size: 10px;
     font-weight: 750;
-
     margin: 22px 11px 7px;
 }
-
-
-/* Navigation */
 
 .nav-link {
     display: flex;
     gap: 12px;
     align-items: center;
-
-    color: var(--sidebar-text);
-
+    color: #dcebe0;
     padding: 9px 11px;
-
     border-radius: 8px;
     margin: 2px 0;
-
     font-size: 13px;
     font-weight: 570;
 }
@@ -343,38 +174,23 @@ a:hover {
 
 .nav-link:hover,
 .nav-link.is-active {
-    background: var(--sidebar-active);
-    color: #ffffff;
-
+    background: #28654d;
+    color: #fff;
     text-decoration: none;
 }
-
-
-/* =========================================================
-   MAIN AREA
-   ========================================================= */
 
 .main-area {
     min-width: 0;
     flex: 1;
 }
 
-
-/* =========================================================
-   TOP BAR
-   ========================================================= */
-
 .topbar {
     height: 80px;
-
     background: var(--paper);
-
     border-bottom: 1px solid var(--line);
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 42px;
 }
 
@@ -386,43 +202,28 @@ a:hover {
 
 .eyebrow {
     font-size: 10px;
-
     color: var(--green-2);
-
     margin: 0 0 2px;
-
     text-transform: uppercase;
     letter-spacing: 0.11em;
-
     font-weight: 800;
 }
-
-
-/* =========================================================
-   USER MENU
-   ========================================================= */
 
 .user-menu {
     display: flex;
     align-items: center;
-
     gap: 9px;
-
     font-size: 12px;
 }
 
 .user-avatar {
     display: grid;
     place-items: center;
-
     width: 33px;
     height: 33px;
-
     border-radius: 50%;
-
     background: var(--mint);
     color: var(--avatar-text);
-
     font-weight: 800;
 }
 
@@ -432,15 +233,11 @@ a:hover {
 
 .logout {
     appearance: none;
-
     border: 0;
     background: transparent;
-
     color: var(--muted);
-
     font-size: 11px;
     padding: 0;
-
     cursor: pointer;
 }
 
@@ -448,53 +245,29 @@ a:hover {
     display: none;
 }
 
-
-/* =========================================================
-   THEME TOGGLE
-   ========================================================= */
-
+/* Theme toggle */
 .theme-toggle {
     appearance: none;
-
     border: 1px solid var(--line);
-
     background: var(--paper);
     color: var(--ink);
-
     border-radius: 8px;
-
     padding: 7px 11px;
-
     font-size: 12px;
     font-weight: 650;
-
     cursor: pointer;
-
     display: inline-flex;
     align-items: center;
-
     gap: 6px;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
 }
 
 .theme-toggle:hover {
     border-color: var(--line-strong);
 }
 
-
-/* =========================================================
-   PAGE CONTENT
-   ========================================================= */
-
 .page-content {
     max-width: 1440px;
-
     margin: 0 auto;
-
     padding: 38px 42px;
 }
 
@@ -512,78 +285,46 @@ hr {
     display: none;
 }
 
-
-/* =========================================================
-   SEARCH / FILTER FORMS
-   ========================================================= */
-
+/* Search/filter forms */
 form[method="get"] {
     background: var(--paper);
-
     border: 1px solid var(--line);
-
     box-shadow: 0 1px 2px var(--shadow-color);
-
     border-radius: 12px;
-
     padding: 16px 18px;
-
     margin: 16px 0 22px;
-
     display: flex;
-
     gap: 12px;
-
     align-items: end;
-
     flex-wrap: wrap;
 }
 
 form[method="get"] p {
     margin: 0;
-
     display: flex;
     flex-direction: column;
-
     gap: 5px;
-
     min-width: 190px;
     flex: 1;
 }
 
-
-/* =========================================================
-   FORMS
-   ========================================================= */
-
+/* Forms */
 label {
     font-size: 12px;
     font-weight: 720;
-
-    color: var(--ink);
+    color: #435148;
 }
 
 input,
 select,
 textarea {
     width: 100%;
-
     padding: 10px 11px;
-
     border: 1px solid var(--input-border);
-
     border-radius: 7px;
-
     background: var(--paper);
-    color: var(--ink);
-
     font: inherit;
-}
-
-input::placeholder,
-select::placeholder,
-textarea::placeholder {
-    color: var(--muted);
+    color: var(--ink);
 }
 
 input:focus,
@@ -591,25 +332,19 @@ select:focus,
 textarea:focus {
     outline: 2px solid #a9d6ad;
     outline-offset: 1px;
-
     border-color: var(--green-2);
 }
 
 button,
 .button {
     border: 0;
-
     border-radius: 7px;
-
     background: var(--green);
-    color: var(--button-text);
-
+    color: #fff;
     padding: 10px 14px;
-
     font: inherit;
     font-size: 13px;
     font-weight: 700;
-
     cursor: pointer;
 }
 
@@ -618,75 +353,49 @@ button:hover,
     background: var(--green-2);
 }
 
-
-/* =========================================================
-   ADD BUTTONS
-   ========================================================= */
-
+/* Add buttons */
 .page-content>p>a[href*="add"],
 .page-content>a[href*="add"] {
     display: inline-flex;
-
     background: var(--green);
-    color: var(--button-text);
-
+    color: #fff;
     padding: 10px 14px;
-
     border-radius: 7px;
-
     margin-bottom: 2px;
 }
 
 .page-content>p>a[href*="add"]:hover,
 .page-content>a[href*="add"]:hover {
     text-decoration: none;
-    background: var(--green-2);
+    background: #123d2e;
 }
 
-
-/* =========================================================
-   TABLES
-   ========================================================= */
-
+/* Tables */
 table {
     border-collapse: separate !important;
     border-spacing: 0;
-
     width: 100%;
-
     background: var(--paper);
-
     border: 1px solid var(--line) !important;
-
     border-radius: 12px;
-
     overflow: hidden;
-
     box-shadow: 0 1px 2px var(--shadow-color);
 }
 
 th {
     background: var(--surface-alt);
-
     color: var(--th-text);
-
     text-align: left;
-
     text-transform: uppercase;
-
     letter-spacing: 0.055em;
-
     font-size: 10px;
 }
 
 th,
 td {
     padding: 13px 15px !important;
-
     border: 0 !important;
-
     border-bottom: 1px solid var(--line-soft) !important;
-
     vertical-align: middle;
 }
 
@@ -706,28 +415,17 @@ td:last-child a {
 td:last-child button {
     font-size: 12px;
     padding: 5px 8px;
-
     background: transparent;
-
     color: var(--danger);
 }
 
-
-/* =========================================================
-   STANDARD POST FORMS
-   ========================================================= */
-
+/* Standard POST forms */
 .page-content>form[method="post"] {
     max-width: 690px;
-
     background: var(--paper);
-
     border: 1px solid var(--line);
-
     border-radius: 12px;
-
     padding: 24px;
-
     box-shadow: 0 1px 2px var(--shadow-color);
 }
 
@@ -742,21 +440,15 @@ td:last-child button {
 
 .page-content>form .helptext {
     display: block;
-
     color: var(--muted);
-
     font-size: 11px;
-
     margin-top: 4px;
 }
 
 .page-content>form ul.errorlist {
     margin: 4px 0;
-
     padding-left: 18px;
-
     color: var(--danger);
-
     font-size: 12px;
 }
 
@@ -765,41 +457,27 @@ td:last-child button {
     margin-top: 14px;
 }
 
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
-
+/* Login screen */
 .login-screen {
     min-height: 100vh;
-
-    background: linear-gradient(135deg,
-            #173f32,
-            #326649);
-
+    background: linear-gradient(135deg, #173f32, #326649);
     display: grid;
     place-items: center;
-
     padding: 20px;
 }
 
 .login-card {
     width: min(420px, 100%);
-
     background: var(--paper);
-
     padding: 38px;
-
     border-radius: 16px;
-
-    box-shadow: 0 25px 60px rgba(0, 27, 13, 0.33);
+    box-shadow: 0 25px 60px #001b0d55;
 }
 
+/* Make FarmFlow visible on white login card */
 .login-card .brand {
     color: var(--green);
-
     padding: 0;
-
     display: flex;
     align-items: center;
 }
@@ -814,7 +492,7 @@ td:last-child button {
 
 .login-card .brand .brand-mark {
     background: var(--green);
-    color: #ffffff;
+    color: #fff;
 }
 
 .login-card h2 {
@@ -844,24 +522,15 @@ td:last-child button {
     font-size: 13px;
 }
 
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
+/* Dashboard */
 .dashboard-hero {
     display: flex;
-
     justify-content: space-between;
     align-items: end;
-
     background: var(--green);
-    color: #ffffff;
-
+    color: #fff;
     border-radius: 14px;
-
     padding: 30px;
-
     margin-bottom: 26px;
 }
 
@@ -877,36 +546,24 @@ td:last-child button {
 
 .dashboard-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(190px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 14px;
 }
 
 .dash-card {
     display: block;
-
     background: var(--paper);
-
     border: 1px solid var(--line);
-
     padding: 20px;
-
     border-radius: 12px;
-
     color: var(--ink);
-
     min-height: 116px;
 }
 
 .dash-card:hover {
     text-decoration: none;
-
     border-color: var(--line-strong);
-
-    box-shadow:
-        0 4px 12px var(--shadow-color-strong);
+    box-shadow: 0 4px 12px var(--shadow-color-strong);
 }
 
 .dash-card .icon {
@@ -916,47 +573,31 @@ td:last-child button {
 
 .dash-card .stat {
     display: block;
-
     margin-top: 10px;
-
     font-size: 30px;
     font-weight: 800;
-
     letter-spacing: -0.6px;
-
     color: var(--ink);
 }
 
 .dash-card strong {
     display: block;
-
     margin-top: 6px;
-
     font-size: 15px;
 }
 
 .dash-card small {
     display: block;
-
     color: var(--muted);
-
     margin-top: 2px;
 }
 
-
-/* =========================================================
-   TABLET / MOBILE
-   ========================================================= */
-
+/* Tablet/mobile */
 @media (max-width: 850px) {
-
     .sidebar {
         position: fixed;
-
         z-index: 10;
-
         transform: translateX(-100%);
-
         transition: transform 0.2s;
     }
 
@@ -966,22 +607,16 @@ td:last-child button {
 
     .menu-button {
         display: block;
-
         background: transparent;
         color: var(--green);
-
         font-size: 22px;
-
         padding: 6px;
-
         margin-right: 10px;
     }
 
     .topbar {
         height: 70px;
-
         padding: 0 18px;
-
         justify-content: flex-start;
     }
 
@@ -1008,13 +643,8 @@ td:last-child button {
     }
 }
 
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
+/* Small mobile */
 @media (max-width: 520px) {
-
     .topbar h1 {
         font-size: 15px;
     }
