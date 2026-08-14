@@ -27,13 +27,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 Secret_Key = os.getenv("SECRET_KEY", "django-insecure-^ep^^zok=hugk2+0e33yw(kc^0t6qziq3ev=*6-o6!s+qnz!v=")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "agricultural-farm-system-ckhq.vercel.app",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://agricultural-farm-system-ckhq.vercel.app",
+]
+
+DEBUG = False
 
 
 # Application definition
