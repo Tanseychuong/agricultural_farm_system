@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from .models import Crop, Worker, Equipment, Farm, Customer, Fertilizer, FertilizerUsage, EquipmentAssignment, EquipmentMaintenance, CropWorker, Harvest, HarvestWorker, Sale, SaleItem
+
 class CropForm(forms.ModelForm):
 
     status = forms.ChoiceField(
@@ -892,25 +891,3 @@ class SaleItemForm(forms.ModelForm):
                 )
 
         return cleaned_data
-
-class SignUpForm(UserCreationForm):
-    """
-    Self-service account creation. New accounts are assigned to one of the
-    four operational roles below on save — Farm Administrator is
-    intentionally excluded and can only be granted through /admin/, so no
-    one can self-elevate to full access.
-    """
-
-    ROLE_CHOICES = [
-        ("Farm Manager", "Farm Manager"),
-        ("Inventory Officer", "Inventory Officer"),
-        ("Sales Officer", "Sales Officer"),
-        ("Farm Worker", "Farm Worker"),
-    ]
-
-    email = forms.EmailField(required=True)
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
-
-    class Meta:
-        model = User
-        fields = ["username", "email", "password1", "password2", "role"]
