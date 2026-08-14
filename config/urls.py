@@ -22,11 +22,11 @@ The `urlpatterns` list routes URLs to views.
 
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from farm.views import (
     FarmLoginView,
     FarmLogoutView,
-    register,
     dashboard,
 
     crop_list,
@@ -104,15 +104,47 @@ from farm.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-# Authentication Path
+    # Authentication
     path("login/", FarmLoginView.as_view(), name="login"),
     path("logout/", FarmLogoutView.as_view(), name="logout"),
-    path("register/", register, name="register"),
 
-    # Dashboard path
+    # Password reset — accounts themselves are created by an admin via
+    # /admin/, this only lets an existing user recover a forgotten password
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="farm/password_reset_form.html",
+            email_template_name="farm/password_reset_email.html",
+            subject_template_name="farm/password_reset_subject.txt",
+        ),
+        name="password_reset",
+    ),
+    path(
+        "password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="farm/password_reset_done.html"
+        ),
+        name="password_reset_done",
+    ),
+    path(
+        "password-reset/confirm/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="farm/password_reset_confirm.html"
+        ),
+        name="password_reset_confirm",
+    ),
+    path(
+        "password-reset/complete/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="farm/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
+    ),
+
+    # Dashboard
     path("", dashboard, name="dashboard"),
 
-    # Crop Management Path
+    # Crop Management
     path("crops/", crop_list, name="crop_list"),
     path("crops/add/", crop_create, name="crop_create"),
     path(
@@ -126,7 +158,7 @@ urlpatterns = [
         name="crop_delete",
     ),
 
-    # Worker Management Path
+    # Worker Management
     path("workers/", worker_list, name="worker_list"),
     path("workers/add/", worker_create, name="worker_create"),
     path(
@@ -140,7 +172,7 @@ urlpatterns = [
         name="worker_delete",
     ),
 
-    # Equipment Management Path
+    # Equipment Management
     path("equipment/", equipment_list, name="equipment_list"),
     path("equipment/add/", equipment_create, name="equipment_create"),
     path(
