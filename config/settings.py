@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-Secret_Key = os.getenv("SECRET_KEY", "django-insecure-^ep^^zok=hugk2+0e33yw(kc^0t6qziq3ev=*6-o6!s+qnz!v=")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -37,7 +38,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://agricultural-farm-system-ckhq.vercel.app",
 ]
 
-DEBUG = False
 
 
 # Application definition
