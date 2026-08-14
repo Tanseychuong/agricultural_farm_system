@@ -1,11 +1,15 @@
+from functools import wraps
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CropForm, WorkerForm, EquipmentForm, FarmForm, CustomerForm, FertilizerForm, FertilizerUsageForm, EquipmentAssignmentForm, EquipmentMaintenanceForm, CropWorkerForm, HarvestForm, HarvestWorkerForm, SaleForm, SaleItemForm
+from .forms import CropForm, WorkerForm, EquipmentForm, FarmForm, CustomerForm, FertilizerForm, FertilizerUsageForm, EquipmentAssignmentForm, EquipmentMaintenanceForm, CropWorkerForm, HarvestForm, HarvestWorkerForm, SaleForm, SaleItemForm, AdminUserCreateForm, AdminUserEditForm
 from .models import Crop, Worker, Equipment, Farm, Customer, Fertilizer, FertilizerUsage, EquipmentAssignment, EquipmentMaintenance, CropWorker, Harvest, HarvestWorker, Sale, SaleItem
 from django.db.models import Q
 
@@ -15,6 +19,127 @@ class FarmLoginView(LoginView):
 
 class FarmLogoutView(LogoutView):
     next_page = "/login/"
+
+
+def superuser_required(view_func):
+    """Like @permission_required(raise_exception=True), but restricted to
+    the actual Django superuser flag rather than a granted permission —
+    used for the Users screen, since account creation is deliberately kept
+    out of reach of every role, including Farm Administrator."""
+
+    @wraps(view_func)
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+
+@superuser_required
+def user_list(request):
+    users = User.objects.all().order_by("username")
+
+    search = request.GET.get("search", "").strip()
+
+    if search:
+        users = users.filter(username__icontains=search) | users.filter(
+            email__icontains=search
+        )
+
+    return render(
+        request,
+        "farm/user_list.html",
+        {
+            "users": users,
+            "search": search,
+        },
+    )
+
+
+@superuser_required
+def user_create(request):
+    if request.method == "POST":
+        form = AdminUserCreateForm(request.POST)
+
+        if form.is_valid():
+            user = form.save()
+
+            role_name = form.cleaned_data["role"]
+            group, _ = Group.objects.get_or_create(name=role_name)
+            user.groups.set([group])
+
+            if role_name == "Farm Administrator":
+                user.is_staff = True
+                user.save()
+
+            return redirect("user_list")
+    else:
+        form = AdminUserCreateForm()
+
+    return render(
+        request,
+        "farm/user_form.html",
+        {
+            "form": form,
+            "title": "Add User",
+        },
+    )
+
+
+@superuser_required
+def user_update(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    current_role = target_user.groups.first()
+
+    if request.method == "POST":
+        form = AdminUserEditForm(request.POST, instance=target_user)
+
+        if form.is_valid():
+            user = form.save()
+
+            role_name = form.cleaned_data["role"]
+            group, _ = Group.objects.get_or_create(name=role_name)
+            user.groups.set([group])
+            user.is_staff = role_name == "Farm Administrator"
+            user.save()
+
+            return redirect("user_list")
+    else:
+        form = AdminUserEditForm(
+            instance=target_user,
+            initial={"role": current_role.name if current_role else ""},
+        )
+
+    return render(
+        request,
+        "farm/user_form.html",
+        {
+            "form": form,
+            "title": "Edit User",
+        },
+    )
+
+
+@superuser_required
+def user_delete(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+
+    if target_user.is_superuser:
+        return redirect("user_list")
+
+    if request.method == "POST":
+        target_user.delete()
+        return redirect("user_list")
+
+    return render(
+        request,
+        "farm/user_confirm_delete.html",
+        {
+            "target_user": target_user,
+        },
+    )
 
 
 @login_required

@@ -1,0 +1,54 @@
+{% extends "farm/base.html" %} {% block content %}
+
+<h2>User Management</h2>
+
+<a href="{% url 'user_create' %}">Add User</a>
+
+<hr />
+
+<form method="get">
+    <input type="text" name="search" placeholder="Search username or email" value="{{ search }}" />
+
+    <button type="submit">Search</button>
+</form>
+
+<hr />
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Active</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for u in users %}
+
+    <tr>
+        <td>{{ u.username }}{% if u.is_superuser %} (superuser){% endif %}</td>
+        <td>{{ u.email }}</td>
+        <td>
+            {% for group in u.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor
+            %}
+        </td>
+        <td>{% if u.is_active %}Yes{% else %}No{% endif %}</td>
+
+        <td>
+            {% if not u.is_superuser %}
+            <a href="{% url 'user_update' u.id %}"> Edit </a>
+            <a href="{% url 'user_delete' u.id %}">Delete</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="5">No users found.</td>
+    </tr>
+
+    {% endfor %}
+</table>
+
+{% endblock %}

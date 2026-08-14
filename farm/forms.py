@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import Crop, Worker, Equipment, Farm, Customer, Fertilizer, FertilizerUsage, EquipmentAssignment, EquipmentMaintenance, CropWorker, Harvest, HarvestWorker, Sale, SaleItem
 
 class CropForm(forms.ModelForm):
@@ -891,3 +893,38 @@ class SaleItemForm(forms.ModelForm):
                 )
 
         return cleaned_data
+
+
+# Role choices mirror the five Django groups seeded by `seed_roles`
+# (see farm/management/commands/seed_roles.py). Only reachable by a
+# superuser, via the Users screen — see farm/views.py:user_create/user_update.
+ROLE_CHOICES = [
+    ("Farm Administrator", "Farm Administrator"),
+    ("Farm Manager", "Farm Manager"),
+    ("Inventory Officer", "Inventory Officer"),
+    ("Sales Officer", "Sales Officer"),
+    ("Farm Worker", "Farm Worker"),
+]
+
+
+class AdminUserCreateForm(UserCreationForm):
+    """Used on the 'Add User' screen — a superuser creates the account and
+    assigns it a role in one step."""
+
+    email = forms.EmailField(required=True)
+    role = forms.ChoiceField(choices=ROLE_CHOICES)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2", "role"]
+
+
+class AdminUserEditForm(forms.ModelForm):
+    """Used on the 'Edit User' screen — change role or active status.
+    Password changes go through the password-reset flow instead."""
+
+    role = forms.ChoiceField(choices=ROLE_CHOICES)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "is_active", "role"]
