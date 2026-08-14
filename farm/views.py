@@ -2,12 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CropForm, WorkerForm, EquipmentForm, FarmForm, CustomerForm, FertilizerForm, FertilizerUsageForm, EquipmentAssignmentForm, EquipmentMaintenanceForm, CropWorkerForm, HarvestForm, HarvestWorkerForm, SaleForm, SaleItemForm, SignUpForm
+from .forms import CropForm, WorkerForm, EquipmentForm, FarmForm, CustomerForm, FertilizerForm, FertilizerUsageForm, EquipmentAssignmentForm, EquipmentMaintenanceForm, CropWorkerForm, HarvestForm, HarvestWorkerForm, SaleForm, SaleItemForm
 from .models import Crop, Worker, Equipment, Farm, Customer, Fertilizer, FertilizerUsage, EquipmentAssignment, EquipmentMaintenance, CropWorker, Harvest, HarvestWorker, Sale, SaleItem
 from django.db.models import Q
 
@@ -18,29 +16,6 @@ class FarmLoginView(LoginView):
 class FarmLogoutView(LogoutView):
     next_page = "/login/"
 
-
-def register(request):
-    if request.user.is_authenticated:
-        return redirect("dashboard")
-
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-
-            role_name = form.cleaned_data["role"]
-            group, _ = Group.objects.get_or_create(name=role_name)
-            user.groups.add(group)
-
-            messages.success(
-                request,
-                f"Account created as {role_name}. You can now sign in.",
-            )
-            return redirect("login")
-    else:
-        form = SignUpForm()
-
-    return render(request, "farm/register.html", {"form": form})
 
 @login_required
 def dashboard(request):
