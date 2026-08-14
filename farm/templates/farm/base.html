@@ -1,6 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +22,7 @@
 
             <nav>
                 <a href="{% url 'dashboard' %}"
-                   class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}">
+                    class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}">
                     Dashboard
                 </a>
 
@@ -86,14 +87,18 @@
                 {% if perms.farm.view_saleitem %}
                 <a href="{% url 'sale_item_list' %}" class="nav-link">Sale items</a>
                 {% endif %}
+
+                {% if user.is_superuser %}
+                <p class="sidebar-label">Administration</p>
+                <a href="{% url 'user_list' %}" class="nav-link">Users</a>
+                {% endif %}
             </nav>
         </aside>
 
         <main class="main-area">
             <header class="topbar">
-                <button class="menu-button"
-                        aria-label="Open navigation"
-                        onclick="document.body.classList.toggle('nav-open')">
+                <button class="menu-button" aria-label="Open navigation"
+                    onclick="document.body.classList.toggle('nav-open')">
                     Menu
                 </button>
 
@@ -130,4 +135,5 @@
     </div>
     {% endif %}
 </body>
+
 </html>
