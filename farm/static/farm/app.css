@@ -1,22 +1,27 @@
 :root {
-    --green: #174c3a;
-    --green-2: #21634b;
-    --mint: #e9f3eb;
-    --avatar-text: var(--green);
-    --ink: #1c2923;
-    --muted: #718078;
-    --line: #dce5de;
-    --line-soft: #edf1ee;
-    --line-strong: #b9cdbd;
-    --paper: #fff;
-    --ground: #f5f7f4;
-    --surface-alt: #f8faf8;
-    --hover-bg: #fafcfb;
-    --input-border: #cbd7ce;
-    --shadow-color: #192b1d08;
-    --shadow-color-strong: #192b1d0d;
-    --th-text: #526057;
-    --danger: #b23838;
+    --accent: #3f8c3c;
+    --accent-2: #2a4a2a;
+    --accent-soft: #5fcb5ac8;
+    --sidebar-bg: #2a4a2a;
+    --sidebar-text: #dcebe0;
+    --sidebar-text-muted: #a9c4ae;
+    --sidebar-hover-bg: #355a35;
+    --mint: #e7f9e8;
+    --avatar-text: var(--accent);
+    --ink: #1e2530;
+    --muted: #667085;
+    --line: #e3e7ec;
+    --line-soft: #edf0f4;
+    --line-strong: #c7cfd9;
+    --paper: #fbfcfe;
+    --ground: #eef1f6;
+    --surface-alt: #eef2f7;
+    --hover-bg: #f4f7fb;
+    --input-border: #cdd5e0;
+    --shadow-color: #1c273408;
+    --shadow-color-strong: #1c27340d;
+    --th-text: #5b6472;
+    --danger: #c0392b;
     color-scheme: light;
 }
 
@@ -24,42 +29,48 @@
    OR automatically when the OS is in dark mode and the user hasn't
    explicitly chosen "light" (see the inline theme script in base.html). */
 html[data-theme="dark"] {
-    --mint: #23392d;
-    --avatar-text: #8fd39b;
-    --ink: #e6ece8;
-    --muted: #93a69b;
-    --line: #2a3d33;
-    --line-soft: #223028;
-    --line-strong: #3a4c40;
-    --paper: #17221b;
-    --ground: #0f1712;
-    --surface-alt: #1c2820;
-    --hover-bg: #1c2921;
-    --input-border: #33453a;
+    --accent: #f8f8f9;
+    --accent-2: #e7eaef;
+    --accent-soft: #f6f6f7;
+    --mint: #22314a;
+    --avatar-text: #f5f6f9;
+    --ink: #e6eaf0;
+    --muted: #97a2b3;
+    --line: #030507;
+    --line-soft: #040608;
+    --line-strong: #050709;
+    --paper: #171e29;
+    --ground: #10151d;
+    --surface-alt: #040a13;
+    --hover-bg: #0e1016;
+    --input-border: #070809;
     --shadow-color: rgba(0, 0, 0, 0.45);
     --shadow-color-strong: rgba(0, 0, 0, 0.55);
-    --th-text: #8fa398;
+    --th-text: #8b96a7;
     --danger: #e2665f;
     color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
     html:not([data-theme="light"]):not([data-theme="dark"]) {
-        --mint: #23392d;
-        --avatar-text: #8fd39b;
-        --ink: #e6ece8;
-        --muted: #93a69b;
-        --line: #2a3d33;
-        --line-soft: #223028;
-        --line-strong: #3a4c40;
-        --paper: #17221b;
-        --ground: #0f1712;
-        --surface-alt: #1c2820;
-        --hover-bg: #1c2921;
-        --input-border: #33453a;
+        --accent: #c9ced7;
+        --accent-2: #f1f3f4;
+        --accent-soft: #ebeef2;
+        --mint: #22314a;
+        --avatar-text: #eceff4;
+        --ink: #e6eaf0;
+        --muted: #97a2b3;
+        --line: #29323f;
+        --line-soft: #212a36;
+        --line-strong: #3a4556;
+        --paper: #171e29;
+        --ground: #10151d;
+        --surface-alt: #1b2330;
+        --hover-bg: #1a2130;
+        --input-border: #303b4b;
         --shadow-color: rgba(0, 0, 0, 0.45);
         --shadow-color-strong: rgba(0, 0, 0, 0.55);
-        --th-text: #8fa398;
+        --th-text: #8b96a7;
         --danger: #e2665f;
         color-scheme: dark;
     }
@@ -79,7 +90,7 @@ body {
 }
 
 a {
-    color: var(--green-2);
+    color: var(--accent-2);
     text-decoration: none;
     font-weight: 650;
 }
@@ -96,8 +107,8 @@ a:hover {
 .sidebar {
     width: 252px;
     flex: none;
-    background: var(--green);
-    color: #e8f1ea;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
     padding: 24px 14px;
     position: sticky;
     top: 0;
@@ -105,12 +116,12 @@ a:hover {
     overflow: auto;
 }
 
-/* Main FarmFlow brand */
+/* Brand */
 .brand {
     display: flex;
     gap: 10px;
     align-items: center;
-    color: #2c630c;
+    color: var(--accent);
     font-size: 22px;
     font-weight: 760;
     letter-spacing: -0.8px;
@@ -118,7 +129,7 @@ a:hover {
 }
 
 .brand span span {
-    color: #0d6c15;
+    color: var(--accent-2);
 }
 
 
@@ -127,8 +138,8 @@ a:hover {
     width: 31px;
     height: 31px;
     border-radius: 10px;
-    background: #8fc495;
-    color: #174c3a;
+    background: var(--accent);
+    color: #fff;
     display: grid;
     place-items: center;
     font-size: 18px;
@@ -137,16 +148,16 @@ a:hover {
 
 /* Login page brand */
 .login-card .brand {
-    color: var(--green);
+    color: var(--accent);
     padding: 0;
 }
 
 .login-card .brand span span {
-    color: var(--green-2);
+    color: var(--accent-2);
 }
 
 .sidebar-label {
-    color: #a8c4af;
+    color: var(--sidebar-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.09em;
     font-size: 10px;
@@ -158,7 +169,7 @@ a:hover {
     display: flex;
     gap: 12px;
     align-items: center;
-    color: #dcebe0;
+    color: var(--sidebar-text);
     padding: 9px 11px;
     border-radius: 8px;
     margin: 2px 0;
@@ -169,12 +180,12 @@ a:hover {
 .nav-link span {
     width: 16px;
     text-align: center;
-    color: #a9d6ad;
+    color: #e4e7ec;
 }
 
 .nav-link:hover,
 .nav-link.is-active {
-    background: #28654d;
+    background: var(--sidebar-hover-bg);
     color: #fff;
     text-decoration: none;
 }
@@ -202,7 +213,7 @@ a:hover {
 
 .eyebrow {
     font-size: 10px;
-    color: var(--green-2);
+    color: var(--accent-soft);
     margin: 0 0 2px;
     text-transform: uppercase;
     letter-spacing: 0.11em;
@@ -312,7 +323,7 @@ form[method="get"] p {
 label {
     font-size: 12px;
     font-weight: 720;
-    color: #435148;
+    color: var(--muted);
 }
 
 input,
@@ -330,16 +341,16 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-    outline: 2px solid #a9d6ad;
+    outline: 2px solid var(--accent-soft);
     outline-offset: 1px;
-    border-color: var(--green-2);
+    border-color: var(--accent);
 }
 
 button,
 .button {
     border: 0;
     border-radius: 7px;
-    background: var(--green);
+    background: var(--accent);
     color: #fff;
     padding: 10px 14px;
     font: inherit;
@@ -350,14 +361,14 @@ button,
 
 button:hover,
 .button:hover {
-    background: var(--green-2);
+    background: var(--accent-2);
 }
 
 /* Add buttons */
 .page-content>p>a[href*="add"],
 .page-content>a[href*="add"] {
     display: inline-flex;
-    background: var(--green);
+    background: var(--accent);
     color: #fff;
     padding: 10px 14px;
     border-radius: 7px;
@@ -367,7 +378,7 @@ button:hover,
 .page-content>p>a[href*="add"]:hover,
 .page-content>a[href*="add"]:hover {
     text-decoration: none;
-    background: #123d2e;
+    background: var(--accent-2);
 }
 
 /* Tables */
@@ -460,7 +471,7 @@ td:last-child button {
 /* Login screen */
 .login-screen {
     min-height: 100vh;
-    background: linear-gradient(135deg, #173f32, #326649);
+    background: linear-gradient(135deg, #4f6e4b, #2e5b2f);
     display: grid;
     place-items: center;
     padding: 20px;
@@ -471,27 +482,27 @@ td:last-child button {
     background: var(--paper);
     padding: 38px;
     border-radius: 16px;
-    box-shadow: 0 25px 60px #001b0d55;
+    box-shadow: 0 25px 60px #0b152c55;
 }
 
-/* Make FarmFlow visible on white login card */
+/* Brand visible on the login card */
 .login-card .brand {
-    color: var(--green);
+    color: var(--accent);
     padding: 0;
     display: flex;
     align-items: center;
 }
 
 .login-card .brand>span {
-    color: var(--green);
+    color: var(--accent);
 }
 
 .login-card .brand>span>span {
-    color: var(--green-2);
+    color: var(--accent-2);
 }
 
 .login-card .brand .brand-mark {
-    background: var(--green);
+    background: var(--accent);
     color: #fff;
 }
 
@@ -527,7 +538,7 @@ td:last-child button {
     display: flex;
     justify-content: space-between;
     align-items: end;
-    background: var(--green);
+    background: var(--accent);
     color: #fff;
     border-radius: 14px;
     padding: 30px;
@@ -541,7 +552,7 @@ td:last-child button {
 
 .dashboard-hero p {
     margin: 7px 0 0;
-    color: #d2e5d5;
+    color: #d9e6ff;
 }
 
 .dashboard-grid {
@@ -568,7 +579,7 @@ td:last-child button {
 
 .dash-card .icon {
     font-size: 19px;
-    color: var(--green);
+    color: var(--accent);
 }
 
 .dash-card .stat {
@@ -608,7 +619,7 @@ td:last-child button {
     .menu-button {
         display: block;
         background: transparent;
-        color: var(--green);
+        color: var(--accent);
         font-size: 22px;
         padding: 6px;
         margin-right: 10px;
