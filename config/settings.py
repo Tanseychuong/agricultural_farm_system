@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     "agricultural-farm-system-ckhq.vercel.app",
 ]
 
+# CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = [
     "https://agricultural-farm-system-ckhq.vercel.app",
 ]
