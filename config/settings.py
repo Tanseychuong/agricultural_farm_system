@@ -31,6 +31,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "localhost:8080",
     "agricultural-farm-system-ckhq.vercel.app",
 ]
 
