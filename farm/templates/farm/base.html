@@ -18,7 +18,7 @@
         (function () {
             var stored = localStorage.getItem('theme'); // 'light' | 'dark' | null
             if (stored === 'light' || stored === 'dark') {
-                document.documentElement.setAttribute('data-theme', stored);
+                document.documentElement.setAttribute('data-theme', stored); // set the attribute to the stored value
             }
         })();
     </script>
